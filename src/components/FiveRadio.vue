@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import app from "@/components/FirebaseConfig.vue"
+import app from "@/components/settings/FirebaseConfig.vue"
 import { collection, getDocs, getFirestore } from "firebase/firestore"; 
 const db = getFirestore(app);
 const querySnapshot = await getDocs(collection(db, "question"));
@@ -11,7 +11,6 @@ querySnapshot.forEach((doc) => {
 });
 
 const state = reactive({ message: "", currentQuestion: 0, answer:"" });
-
 
 // let exams = [
 //   { question: '白痴的英文「idiot」願意是指哪種人？', answer: '不關心政治的人', options: ['不關心政治的人', '看喜劇沒笑的人', '上學沒交作業的人', '數學不好的人'] },

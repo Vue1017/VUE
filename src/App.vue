@@ -17,8 +17,11 @@ let choice = ref("請選擇");
     </select>
     <Suspense>
     <Question v-if="choice === 'Question'" />
+  </Suspense>
+  <Suspense>
     <FiveRadio v-if="choice === 'FiveRadio'" />
   </Suspense>
+ 
   </div>
   </main>
 </template>
