@@ -1,11 +1,7 @@
 <script setup lang="ts">
 
 import FiveRadio from './components/FiveRadio.vue';
-<<<<<<< HEAD
 import { reactive } from "vue";
-=======
-import { reactive, ref } from "vue";
->>>>>>> 7846c955571a0e3c0192d86d19a9baa63a19cead
 import Question from "./components/EnglishDB.vue"; 
 
 let choice = reactive({title:'冷知識', value:"Question"});
@@ -18,11 +14,7 @@ let items=[
 <template>
   <main>
     <div>
-<<<<<<< HEAD
       <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
-=======
-      <v-select label="請選擇" :v-model="choice" :items="items" item-title="title" item-value="value">
->>>>>>> 7846c955571a0e3c0192d86d19a9baa63a19cead
     </v-select>
     <Suspense>
       <Question v-if="choice.value === 'Question'" />
