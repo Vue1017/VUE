@@ -1,20 +1,25 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+
+import FiveRadio from './components/FiveRadio.vue';
+import { ref } from "vue";
+import Question from "./components/EnglishDB.vue"; 
+
+let choice = ref("請選擇");
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-      hi我是彭于芳
-    </div>
-  </header>
-
   <main>
-    <TheWelcome />
+    <div>
+    <select v-model="choice">
+      <option>請選擇</option>
+      <option value="Question">冷知識</option>
+      <option value="FiveRadio">冷知識22222</option>
+    </select>
+    <Suspense>
+    <Question v-if="choice === 'Question'" />
+    <FiveRadio v-if="choice === 'FiveRadio'" />
+  </Suspense>
+  </div>
   </main>
 </template>
 
