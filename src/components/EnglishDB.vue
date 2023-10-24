@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { collection, getDocs, getFirestore } from 'firebase/firestore'
 import app from "@/components/settings/FirebaseConfig.vue"
 const db = getFirestore(app);
-const querySnapshot = await getDocs(collection(db, "question"));
+const querySnapshot = await getDocs(collection(db, "English"));
 
 let exams:{title:string, answer:string}[]=[];
 querySnapshot.forEach((doc) => {

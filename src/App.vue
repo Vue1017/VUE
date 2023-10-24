@@ -1,26 +1,27 @@
 <script setup lang="ts">
 
 import FiveRadio from './components/FiveRadio.vue';
-import { ref } from "vue";
+import { reactive } from "vue";
 import Question from "./components/EnglishDB.vue"; 
 
-let choice = ref("請選擇");
+let choice = reactive({title:'冷知識', value:"Question"});
+let items=[
+  {title:'冷知識', value:"Question"},
+  {title:'冷知識2', value:"FiveRadio"},
+]
 </script>
 
 <template>
   <main>
     <div>
-    <select v-model="choice">
-      <option>請選擇</option>
-      <option value="Question">冷知識</option>
-      <option value="FiveRadio">冷知識22222</option>
-    </select>
+      <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
+    </v-select>
     <Suspense>
-    <Question v-if="choice === 'Question'" />
-  </Suspense>
-  <Suspense>
-    <FiveRadio v-if="choice === 'FiveRadio'" />
-  </Suspense>
+      <Question v-if="choice.value === 'Question'" />
+    </Suspense>
+    <Suspense>
+      <FiveRadio v-if="choice.value === 'FiveRadio'" />
+    </Suspense>
  
   </div>
   </main>
