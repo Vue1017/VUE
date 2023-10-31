@@ -1,20 +1,22 @@
 <script setup lang="ts">
-
+import '@mdi/font/css/materialdesignicons.css'
 import FiveRadio from './components/FiveRadio.vue';
 import { reactive, ref } from "vue";
 import Question from "./components/EnglishDB.vue"; 
+import Animal from "./components/AnimalApp.vue"; 
 let drawer = ref(false);
 let choice = reactive({title:'冷知識', value:"Question"});
 let items=[
   {title:'冷知識', value:"Question"},
   {title:'冷知識2', value:"FiveRadio"},
+  {title:'動物常識', value:"Animal"}
 ]
 </script>
 
 <template>
   <v-app class="rounded rounded-md">
     <v-app-bar title="Education Zoo">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer">menu</v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
       <v-list>
@@ -37,6 +39,9 @@ let items=[
     </Suspense>
     <Suspense>
       <FiveRadio v-if="choice.value === 'FiveRadio'" />
+    </Suspense>
+    <Suspense>
+      <Animal v-if="choice.value === 'Animal'" />
     </Suspense>
   </v-container>
   </div>
