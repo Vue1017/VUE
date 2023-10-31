@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 import FiveRadio from './components/FiveRadio.vue';
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import Question from "./components/EnglishDB.vue"; 
-
+let drawer = ref(false);
 let choice = reactive({title:'冷知識', value:"Question"});
 let items=[
   {title:'冷知識', value:"Question"},
@@ -12,8 +12,24 @@ let items=[
 </script>
 
 <template>
-  <main>
-    <div>
+  <v-app class="rounded rounded-md">
+    <v-app-bar title="Education Zoo">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer">menu</v-app-bar-nav-icon>
+    </v-app-bar>
+    <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
+      <v-list>
+        <v-list-item v-for="item in items"
+          :title="item.title" 
+          :key="item.value" 
+          :active="item.value === choice.value"
+          @click="choice.value = item.value">
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-main>
+      <div>
+        <v-container>
       <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
     </v-select>
     <Suspense>
@@ -22,9 +38,10 @@ let items=[
     <Suspense>
       <FiveRadio v-if="choice.value === 'FiveRadio'" />
     </Suspense>
- 
+  </v-container>
   </div>
-  </main>
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>
