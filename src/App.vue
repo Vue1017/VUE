@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import '@mdi/font/css/materialdesignicons.css'
 import FiveRadio from './components/FiveRadio.vue';
-import { reactive, ref } from "vue";
+import { provide ,reactive, ref } from "vue";
 import Question from "./components/EnglishDB.vue"; 
-import Animal from "./components/AnimalApp.vue"; 
+import Animal from "./components/AnimalApp.vue";
+import router from './router'; 
+
 let drawer = ref(false);
 let choice = reactive({title:'冷知識', value:"Question"});
 let items=[
-  {title:'冷知識', value:"Question"},
-  {title:'冷知識2', value:"FiveRadio"},
-  {title:'動物常識', value:"Animal"}
+  {title:'冷知識', to:"/english"},
+  {title:'冷知識2', to:"/fiveradio"},
+  {title:'動物常識', to:"/animalapp"}
 ]
+
+const account = reactive({
+  name: '彭于芳',
+  email: 'prp00328evonne@gmail.com'})
+provide(/* key */ 'account', /* value */ account)
+
 </script>
 
 <template>
@@ -20,11 +28,12 @@ let items=[
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
       <v-list>
-        <v-list-item v-for="item in items"
-          :title="item.title" 
-          :key="item.value" 
-          :active="item.value === choice.value"
-          @click="choice.value = item.value">
+        <v-list-item
+          v-for="item in items"
+          :title="item.title"
+          :key="item.title"
+          :to="item.to"
+        >
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -32,7 +41,7 @@ let items=[
     <v-main>
       <div>
         <v-container>
-      <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
+      <!-- <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
     </v-select>
     <Suspense>
       <Question v-if="choice.value === 'Question'" />
@@ -42,7 +51,10 @@ let items=[
     </Suspense>
     <Suspense>
       <Animal v-if="choice.value === 'Animal'" />
-    </Suspense>
+    </Suspense> -->
+    <Suspense>
+        <RouterView />
+      </Suspense>
   </v-container>
   </div>
     </v-main>
@@ -77,3 +89,4 @@ header {
   }
 }
 </style>
+./router

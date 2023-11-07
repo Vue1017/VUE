@@ -8,6 +8,7 @@ const state = reactive({
   answer: [''],
   message: [''],
   exams: [{ title: '', answer: '' }]
+  questionChoice: [{}]
 })
 
 const db = getFirestore(app)
@@ -37,6 +38,18 @@ async function generateQuestions() {
   const querySnapshot = await getDocs(queryExam)
   querySnapshot.forEach((doc) => {
     state.exams.push({ title: doc.data().title, answer: doc.data().answer })
+  })
+}
+
+
+watch(() => state.choice, questionChoice)
+async function questionChoice() {
+  console.log('choice', state.choice)
+  state.exams = []
+  const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice))
+  const querySnapshot = await getDocs(queryExam)
+  querySnapshot.forEach((doc) => {
+    state.questionchoice.push({ title: doc.data().title, answer: doc.data().answer, choice: doc.data().choice})
   })
 }
 </script>

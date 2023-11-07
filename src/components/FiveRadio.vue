@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { reactive , watch} from 'vue'
+import { reactive, watch, inject } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
 import { collection, getDocs, getFirestore, where, query } from 'firebase/firestore'
 
+const account = inject('account',{name:'未登入', email:''})
 const state = reactive({ choice: { title: '單元一', value: 1, index:1 }, answer: [''], message: [''],exams:[{title:"",answer:""}]})
 
 const db = getFirestore(app)
@@ -66,6 +67,7 @@ async function generateQuestions(){
 
 <template>
   <div>
+    {{ account.name }}
     <v-select label="請選擇" v-model="state.choice" :items="units"> </v-select>
   </div>
   <div v-for="(exam, index) in state.exams" :key="index">
