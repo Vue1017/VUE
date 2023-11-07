@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
+import { reactive, watch, ref } from 'vue'
 import app from '@/components/settings/FirebaseConfig.vue'
 import { collection, getDocs, getFirestore, where, query } from 'firebase/firestore'
+import BookOne from '@/components/bookOne.vue'
+import BookTwo from '@/components/bookTwo.vue'
 
 const state = reactive({
-  choice: { title: '單元一', value: 1},
-  answer: [''],
+  choice: { title: '單元一', value: 1 },
+  answer: ['',[]],
   message: [''],
-  exams: [{ title: '', answer: '' }]
-  questionChoice: [{}]
+  exams: [{ title: '', answer: '', answers: [''], choice: ['', ''] }]
+  // questionChoice: [{choice:''}]
 })
 
 const db = getFirestore(app)
 generateQuestions()
+
+// let questionChoice = [
+//   { options: ["老鼠", "鴨嘴獸", "大象", "南極藍鯨"] , unit:1},
+//   { options: ["樹懶", "熊貓", "邱柏儒", "無尾熊"] , unit:2},
+//   { options: ["YT", "輔大官網", "國家地理", "EducationZone"], unit:3
+//   },
+// ];
 
 let units = [
   { title: '單元一', value: 1 },
@@ -20,51 +29,118 @@ let units = [
 ]
 
 function checkAnswers() {
-  state.message = [] // clear previous messages
-  for (let i in state.exams) {
-    if (state.answer[i] !== state.exams[i].answer) {
-      state.message[i] = '不正確'
-    } else {
-      state.message[i] = '正確'
+  if (units[0].value) {
+    state.message = []
+    for (let i in state.exams) {
+      if (state.answer[i] !== state.exams[i].answer) {
+        state.message[i] = '不正確'
+      } else {
+        state.message[i] = '正確'
+      }
+    }
+  } else {
+    state.message = []
+    for (let i in state.exams) {
+      if (state.answer[i] !== state.exams[i].answer) {
+        state.message[i] = '不正確'
+      } else {
+        state.message[i] = '正確'
+      }
     }
   }
 }
 
-watch(() => state.choice, generateQuestions)
+async function next() {
+  const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice.value))
+  const querySnapshot = await getDocs(queryExam)
+  querySnapshot.forEach((doc) => {
+    console.log('g', doc.data())
+    state.exams.push({
+      title: doc.data().title,
+      answers: doc.data().answer,
+      answer: doc.data().answer,
+      choice: doc.data().choice
+    })
+  })
+  showNextButton.value = true;
+}
+
+watch(() => state.choice.value, generateQuestions)
 async function generateQuestions() {
   console.log('choice', state.choice)
   state.exams = []
-  const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice))
+  const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice.value))
   const querySnapshot = await getDocs(queryExam)
   querySnapshot.forEach((doc) => {
-    state.exams.push({ title: doc.data().title, answer: doc.data().answer })
+    console.log('g', doc.data())
+    state.exams.push({
+      title: doc.data().title,
+      answers: doc.data().answer,
+      answer: doc.data().answer,
+      choice: doc.data().choice
+    })
   })
 }
 
+// watch(() => state.choice, questionChoice)
+// async function questionChoice() {
+//   console.log('choice', state.choice)
+//   state.exams = []
+//   const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice))
+//   const querySnapshot = await getDocs(queryExam)
+//   querySnapshot.forEach((doc) => {
+//     state.questionChoice.push({choice: doc.data().choice})
+//   })
+// }
 
-watch(() => state.choice, questionChoice)
-async function questionChoice() {
-  console.log('choice', state.choice)
-  state.exams = []
-  const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice))
-  const querySnapshot = await getDocs(queryExam)
-  querySnapshot.forEach((doc) => {
-    state.questionchoice.push({ title: doc.data().title, answer: doc.data().answer, choice: doc.data().choice})
-  })
-}
+const showNextButton = ref(true)
 </script>
 
 <template>
   <div>
-    <v-select label="請選擇" v-model="state.choice" :items="units"> </v-select>
+    <v-select label="請選擇" v-model="state.choice.value" :items="units"> </v-select>
   </div>
-  <div v-for="(exam, index) in state.exams" :key="index">
-    <v-text-field
-      v-model="state.answer[index]"
-      :label="exam.title"
-      :messages="state.message[index]"
-    >
-    </v-text-field>
+
+  <div v-if="state.choice.value === 1">
+    <BookOne />
+    <v-btn @click="next" v-if="showNextButton">查看問題</v-btn>
+    <div v-for="(exam, index) in state.exams" :key="index">
+      <v-radio-group
+        v-model="state.answer[index]"
+        :label="exam.title"
+        :messages="state.message[index]"
+      >
+        <v-radio
+          v-for="(c, index) in exam.choice"
+          :key="index"
+          v-model="state.answer[index]"
+          :value="c"
+          :label="c"
+        >
+        </v-radio>
+      </v-radio-group>
+    </div>
+  </div>
+
+  <div v-if="state.choice.value === 2">
+    <BookTwo />
+    <v-btn @click="next" v-if="showNextButton">查看問題</v-btn>
+    <div v-for="(exam, index) in state.exams" :key="index">
+      <v-radio-group
+        v-model="state.answer[index]"
+        :label="exam.title"
+        :messages="state.message[index]"
+      >
+        <v-radio
+          v-for="(c, index) in exam.choice"
+          :key="index"
+          v-model="state.answer[index]"
+          :value="c"
+          :label="c"
+        >
+        </v-radio>
+      </v-radio-group>
+    </div>
   </div>
   <v-btn color="primary" @click="checkAnswers">檢查答案</v-btn>
 </template>

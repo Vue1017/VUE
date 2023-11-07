@@ -1,9 +1,9 @@
-<script setup lang="ts">
++<script setup lang="ts">
 import '@mdi/font/css/materialdesignicons.css'
 import FiveRadio from './components/FiveRadio.vue';
 import { provide ,reactive, ref } from "vue";
 import Question from "./components/EnglishDB.vue"; 
-import Animal from "./components/AnimalApp.vue";
+// import Animal from "./components/AnimalApp.vue";
 import router from './router'; 
 
 let drawer = ref(false);

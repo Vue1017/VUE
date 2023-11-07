@@ -2,7 +2,6 @@
 import { reactive , watch} from 'vue'
 import app from '@/components/settings/FirebaseConfig.vue'
 import { collection, getDocs, getFirestore, where, query } from 'firebase/firestore'
-
 const state = reactive({ choice: { title: '單元一', value: 1, index:1 }, answer: [''], message: [''],exams:[{title:"",answer:""}]})
 
 const db = getFirestore(app)
