@@ -44,11 +44,14 @@ provide(/* key */ 'account', /* value */ readonly(account))
 
 <template>
   <v-app class="rounded rounded-md">
-    <v-app-bar title="Education Zoo">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <router-link to="/Account">
-        <v-btn style="margin: 0px 20px 0px 10px; border: 1px solid gray; border-radius: 10px; padding: 5px;">登入</v-btn>
-      </router-link>
+    <v-app-bar style="background-color: #fffcf0;">
+      <div>
+        <img src="./assets/logo.PNG" style="height: 60px;" />
+      </div>
+      <div id="btn">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-btn style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #F58D59; color: white; font-weight: bold">登入</v-btn>
+      </div>
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
       <v-list>
@@ -57,25 +60,22 @@ provide(/* key */ 'account', /* value */ readonly(account))
       </v-list>
     </v-navigation-drawer>
 
-    <v-main>
+    <v-main style="background-color: #fffcf0;">
       <div>
         <v-container>
-          <!-- <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
-    </v-select>
-    <Suspense>
-      <Question v-if="choice.value === 'Question'" />
-    </Suspense>
-    <Suspense>
-      <FiveRadio v-if="choice.value === 'FiveRadio'" />
-    </Suspense>
-    <Suspense>
-      <Animal v-if="choice.value === 'Animal'" />
-    </Suspense> -->
-          <div>Application bar： {{ account.email }}</div>
           <Suspense>
             <RouterView />
           </Suspense>
         </v-container>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr;">
+        <div style="padding: 200px 110px 200px 290px">
+          <p style="font-size: 50px; font-weight: bold;">用學習陪伴動物</p>
+          <p style="font-size: 35.5px">與小孩共創成長回憶！</p>
+        </div>
+        <div>
+          <img src="./assets/zoo.png" style="height: 450px" />
+        </div>
       </div>
     </v-main>
   </v-app>
@@ -109,4 +109,4 @@ header {
   }
 }
 </style>
-<!-- ./router -->
+./router
