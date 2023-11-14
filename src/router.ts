@@ -4,6 +4,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/index',
+      name: 'index',
+      component: () => import('./components/IndexApp.vue')
+    },
+    {
       path: '/english',
       name: 'english',
       // component: EnglishDB
@@ -26,7 +31,7 @@ const router = createRouter({
       path: '/account',
       name: 'account',
       component: () => import('./components/account/AccountApp.vue')
-    }
+    },
   ]
 })
 

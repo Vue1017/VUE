@@ -91,11 +91,19 @@ async function handleClick(status: 'signIn' | 'signUp'| 'signOut') {
 </script>
 <template>
   <v-container>
-    <v-text-field v-model="account.email" label="帳號"></v-text-field>
-    <v-text-field v-model="account.password" label="密碼" type="password"></v-text-field>
-    <v-alert :type="state.status" title="訊息" :text="state.message"></v-alert>
-    <v-btn color="primary" @click="handleClick('signIn')">登入</v-btn>
-    <v-btn color="secondary" @click="handleClick('signOut')">登出</v-btn>
-    <v-btn color="primary" @click="handleClick('signUp')">註冊</v-btn>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
+      <div></div>
+      <div>
+        <v-text-field v-model="account.email" label="帳號"></v-text-field>
+        <v-text-field v-model="account.password" label="密碼" type="password"></v-text-field>
+        <v-alert :type="state.status" title="訊息" :text="state.message"></v-alert>
+      </div>
+      <div></div>
+    </div>
+    <center style="margin-top: 30px;">
+      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signIn')">登入</v-btn>
+      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signOut')">登出</v-btn>
+      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signUp')">註冊</v-btn>
+    </center>
   </v-container>
 </template>

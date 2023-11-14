@@ -2,7 +2,7 @@
 import '@mdi/font/css/materialdesignicons.css'
 import { provide, reactive, readonly, ref } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, onAuthStateChanged,signOut } from 'firebase/auth'
 
 let drawer = ref(false);
 let choice = reactive({ title: '冷知識', value: "Question" });
@@ -40,19 +40,23 @@ const unsub = onAuthStateChanged(auth, (user) => {
 // provide(/* key */ 'account', /* value */ account)
 provide(/* key */ 'account', /* value */ readonly(account))
 
+async function onClick(){
+  await signOut(auth)
+}
+
 </script>
 
 <template>
   <v-app class="rounded rounded-md">
-    <v-app-bar style="background-color: #fffcf0;">
-      <div>
-        <img src="./assets/logo.PNG" style="height: 60px;" />
-      </div>
+    <v-app-bar display="flex" justify-content=" space-between" background-color="#fffcf0">
+      <router-link to="/index"><img src="./assets/logo.PNG" style="height: 60px; margin-left: 10px;" /></router-link>
+      <v-spacer></v-spacer>
       <div id="btn">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <router-link to="/Account">
-        <v-btn style="margin: 0px 20px 0px 10px; border: 1px solid gray; border-radius: 10px; padding: 5px;">登入</v-btn>
-      </router-link>
+          <v-btn v-if="account.email==''" style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #f58d59; color: white; font-weight: bold;">登入</v-btn>
+          <v-btn v-else style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #f58d59; color: white; font-weight: bold;" @click="onClick()">登出</v-btn>
+        </router-link>
       </div>
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
@@ -70,15 +74,7 @@ provide(/* key */ 'account', /* value */ readonly(account))
           </Suspense>
         </v-container>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr;">
-        <div style="padding: 200px 110px 200px 290px">
-          <p style="font-size: 50px; font-weight: bold;">用學習陪伴動物</p>
-          <p style="font-size: 35.5px">與小孩共創成長回憶！</p>
-        </div>
-        <div>
-          <img src="./assets/zoo.png" style="height: 450px" />
-        </div>
-      </div>
+     
     </v-main>
   </v-app>
 </template>
