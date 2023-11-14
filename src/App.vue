@@ -50,7 +50,9 @@ provide(/* key */ 'account', /* value */ readonly(account))
       </div>
       <div id="btn">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-btn style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #F58D59; color: white; font-weight: bold">登入</v-btn>
+        <router-link to="/Account">
+        <v-btn style="margin: 0px 20px 0px 10px; border: 1px solid gray; border-radius: 10px; padding: 5px;">登入</v-btn>
+      </router-link>
       </div>
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
