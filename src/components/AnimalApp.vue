@@ -37,11 +37,11 @@ let units = [
 ]
 
 function checkAnswers() {
-  if (units[0].value) {
+  if (state.choice.value === 1) {
     state.message = []
     for (let i in state.exams) {
       if (state.answer[i] !== state.exams[i].answer) {
-        state.message[i] = '不正確'
+        state.message[i] = '不正確?'
       } else {
         state.message[i] = '正確'
       }
@@ -49,13 +49,25 @@ function checkAnswers() {
   } else {
     state.message = []
     for (let i in state.exams) {
-        for (let j in state.exams[i].answers) {
-      if (state.answer[j].includes(state.exams[i].answers[j])) {
-        state.message[i] = '不正確'
-      } else {
+      if (state.exams[i].answers.length === state.answers[i].length) {
+        let correct = 0;
+      for (let j in state.exams[i].answers) {
+
+        if(state.answer[i].includes(state.exams[i].answers[j])){
+         correct ++;
+        }
+      }
+       if(correct == state.exams[i].answers.length){
         state.message[i] = '正確'
+       }
+       else {
+        state.message[i] = '不正確2'
+       
+      }  }
+      else {
+        state.message[i] = '不正確1'
      
-       } }
+       }
     }
   }
 }
