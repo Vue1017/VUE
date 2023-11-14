@@ -54,6 +54,9 @@ async function handleClick(status: 'signIn' | 'signUp'| 'signOut') {
         case 'auth/operation-not-allowed':
           state.message = '此帳號已被停用'
           break
+        case 'auth/missing-password':
+          state.message ='請輸入密碼'
+          break
         case 'auth/weak-password':
           state.message = '密碼強度不足'
           break

@@ -46,6 +46,9 @@ provide(/* key */ 'account', /* value */ readonly(account))
   <v-app class="rounded rounded-md">
     <v-app-bar title="Education Zoo">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <router-link to="/Account">
+        <v-btn style="margin: 0px 20px 0px 10px; border: 1px solid gray; border-radius: 10px; padding: 5px;">登入</v-btn>
+      </router-link>
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
       <v-list>
@@ -68,7 +71,7 @@ provide(/* key */ 'account', /* value */ readonly(account))
     <Suspense>
       <Animal v-if="choice.value === 'Animal'" />
     </Suspense> -->
-    <div>Application bar {{ account.email }}</div>
+          <div>Application bar： {{ account.email }}</div>
           <Suspense>
             <RouterView />
           </Suspense>
@@ -106,4 +109,4 @@ header {
   }
 }
 </style>
-./router
+<!-- ./router -->
