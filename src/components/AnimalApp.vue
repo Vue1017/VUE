@@ -5,11 +5,19 @@ import { collection, getDocs, getFirestore, where, query } from 'firebase/firest
 import BookOne from '@/components/bookOne.vue'
 import BookTwo from '@/components/bookTwo.vue'
 
-const state = reactive({
+type state_type = {
+  choice: {title:string, value:number},
+  answer: string[],
+  answers: string[][],
+  message: string[],
+  exams: {title:string, answer:string, answers:string[], choice:string[]}[]
+}
+const state:state_type = reactive({
   choice: { title: '單元一', value: 1 },
-  answer: ['',[]],
+  answer: [''],
+  answers: [],
   message: [''],
-  exams: [{ title: '', answer: '', answers: [''], choice: ['', ''] }]
+  exams: [{ title: '', answer:'', answers: [''], choice: ['', ''] }]
   // questionChoice: [{choice:''}]
 })
 
@@ -41,11 +49,13 @@ function checkAnswers() {
   } else {
     state.message = []
     for (let i in state.exams) {
-      if (state.answer[i] !== state.exams[i].answer) {
+        for (let j in state.exams[i].answers) {
+      if (state.answer[j].includes(state.exams[i].answers[j])) {
         state.message[i] = '不正確'
       } else {
         state.message[i] = '正確'
-      }
+     
+       } }
     }
   }
 }
@@ -71,27 +81,19 @@ async function generateQuestions() {
   state.exams = []
   const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice.value))
   const querySnapshot = await getDocs(queryExam)
+  let i = 0;
   querySnapshot.forEach((doc) => {
     console.log('g', doc.data())
+    state.answers.push([])
     state.exams.push({
       title: doc.data().title,
       answers: doc.data().answer,
       answer: doc.data().answer,
       choice: doc.data().choice
     })
+    i++;
   })
 }
-
-// watch(() => state.choice, questionChoice)
-// async function questionChoice() {
-//   console.log('choice', state.choice)
-//   state.exams = []
-//   const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice))
-//   const querySnapshot = await getDocs(queryExam)
-//   querySnapshot.forEach((doc) => {
-//     state.questionChoice.push({choice: doc.data().choice})
-//   })
-// }
 
 const showNextButton = ref(true)
 </script>
@@ -126,20 +128,26 @@ const showNextButton = ref(true)
     <BookTwo />
     <v-btn @click="next" v-if="showNextButton">查看問題</v-btn>
     <div v-for="(exam, index) in state.exams" :key="index">
-      <v-radio-group
-        v-model="state.answer[index]"
+
+      <div
+
         :label="exam.title"
         :messages="state.message[index]"
       >
-        <v-radio
-          v-for="(c, index) in exam.choice"
-          :key="index"
-          v-model="state.answer[index]"
+      {{ exam.title }}
+      {{ state.message[index] }}
+{{ state.answers[index] }}
+
+      <v-checkbox
+          v-for="(c, i) in exam.choice"
+          :key="i"
+          v-model="state.answers[index]"
           :value="c"
           :label="c"
         >
-        </v-radio>
-      </v-radio-group>
+        </v-checkbox>
+      </div>
+
     </div>
   </div>
   <v-btn color="primary" @click="checkAnswers">檢查答案</v-btn>
