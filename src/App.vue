@@ -1,23 +1,44 @@
-+<script setup lang="ts">
+<script setup lang="ts">
 import '@mdi/font/css/materialdesignicons.css'
-import FiveRadio from './components/FiveRadio.vue';
-import { provide ,reactive, ref } from "vue";
-import Question from "./components/EnglishDB.vue"; 
-// import Animal from "./components/AnimalApp.vue";
-import router from './router'; 
+import { provide, reactive, readonly, ref } from "vue";
+import app from '@/components/settings/FirebaseConfig.vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 let drawer = ref(false);
-let choice = reactive({title:'冷知識', value:"Question"});
-let items=[
-  {title:'冷知識', to:"/english"},
-  {title:'冷知識2', to:"/fiveradio"},
-  {title:'動物常識', to:"/animalapp"}
+let choice = reactive({ title: '冷知識', value: "Question" });
+let items = [
+  { title: '冷知識', to: "/english" },
+  { title: '冷知識2', to: "/fiveradio" },
+  { title: '動物常識', to: "/animalapp" }
 ]
 
+// const account = reactive({
+//   name: '彭于芳',
+//   email: 'prp00328evonne@gmail.com'})
+// provide(/* key */ 'account', /* value */ account)
+
 const account = reactive({
-  name: '彭于芳',
-  email: 'prp00328evonne@gmail.com'})
-provide(/* key */ 'account', /* value */ account)
+  name: '未登入',
+  email: ''
+})
+const auth = getAuth(app)
+const unsub = onAuthStateChanged(auth, (user) => {
+  if (user) {
+    account.name = '已登入'
+    account.email = user.email ? user.email : ''
+    console.log(user);
+  }
+  else {
+    account.name = '未登入'
+    account.email = ''
+  }
+  return () => {
+    unsub();
+  }
+}
+);
+// provide(/* key */ 'account', /* value */ account)
+provide(/* key */ 'account', /* value */ readonly(account))
 
 </script>
 
@@ -28,12 +49,7 @@ provide(/* key */ 'account', /* value */ account)
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
       <v-list>
-        <v-list-item
-          v-for="item in items"
-          :title="item.title"
-          :key="item.title"
-          :to="item.to"
-        >
+        <v-list-item v-for="item in items" :title="item.title" :key="item.title" :to="item.to">
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -41,7 +57,7 @@ provide(/* key */ 'account', /* value */ account)
     <v-main>
       <div>
         <v-container>
-      <!-- <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
+          <!-- <v-select label="請選擇" v-model="choice.value" :items="items" item-title="title" item-value="value">
     </v-select>
     <Suspense>
       <Question v-if="choice.value === 'Question'" />
@@ -52,11 +68,12 @@ provide(/* key */ 'account', /* value */ account)
     <Suspense>
       <Animal v-if="choice.value === 'Animal'" />
     </Suspense> -->
-    <Suspense>
-        <RouterView />
-      </Suspense>
-  </v-container>
-  </div>
+    <div>Application bar {{ account.email }}</div>
+          <Suspense>
+            <RouterView />
+          </Suspense>
+        </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>
