@@ -3,8 +3,11 @@ import { reactive,inject } from 'vue'
 import app from '@/components/settings/FirebaseConfig.vue'
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut, getAuth, } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app';
+import router from '@/router';
+
+const login = inject('account', { name: '未登入', email: '' })
 const account = reactive({
-  email: '',
+  email: login.email,
   password: ''
 })
 const state = reactive({
@@ -14,7 +17,7 @@ const state = reactive({
 
 const auth = getAuth(app)
 
-const login = inject('account', { name: '未登入', email: '' })
+
 
 async function handleClick(status: 'signIn' | 'signUp'| 'signOut') {
   try {
@@ -33,6 +36,7 @@ async function handleClick(status: 'signIn' | 'signUp'| 'signOut') {
       if (res.user) {
         state.status = 'success'
         state.message = login.email+'登入成功'
+        router.push("/index")
       }
     } else{
       state.message = '登出中...'
@@ -101,8 +105,8 @@ async function handleClick(status: 'signIn' | 'signUp'| 'signOut') {
       <div></div>
     </div>
     <center style="margin-top: 30px;">
-      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signIn')">登入</v-btn>
-      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signOut')">登出</v-btn>
+      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signIn')" >登入</v-btn>
+      <!-- <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signOut')">登出</v-btn> -->
       <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signUp')">註冊</v-btn>
     </center>
   </v-container>
