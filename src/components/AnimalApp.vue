@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { reactive, watch, ref } from 'vue'
 import app from '@/components/settings/FirebaseConfig.vue'
-import { collection, getDocs, getFirestore, where, query } from 'firebase/firestore'
+import { collection, getDocs, getFirestore, where, query, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import BookOne from '@/components/bookOne.vue'
 import BookTwo from '@/components/bookTwo.vue'
+import { getAuth, onAuthStateChanged } from '@firebase/auth'
+import { CompilerDeprecationTypes } from '@vue/compiler-core'
+
 
 type state_type = {
   choice: {title:string, value:number},
@@ -21,7 +24,15 @@ const state:state_type = reactive({
   // questionChoice: [{choice:''}]
 })
 
-const db = getFirestore(app)
+const account = reactive({
+  name: '',
+  email: '',
+  password: '',
+  uid:''
+})
+
+const auth = getAuth(app)
+const db = getFirestore(app);
 generateQuestions()
 
 // let questionChoice = [
@@ -31,19 +42,49 @@ generateQuestions()
 //   },
 // ];
 
+const unsub = onAuthStateChanged(auth, async (user)=>{
+  if (user) {
+    account.name='已登入'
+    account.email = user.email?user.email:''
+    account.uid = user.uid?user.uid:''
+    
+    const userDoc = await getDoc(doc(db, "user", user.uid));
+
+    if (userDoc.exists()) {
+      account.name = userDoc.data().name? userDoc.data().name:''
+      account.email = user.uid?user.uid:''
+    }
+    else{
+      account.name = '未登入'
+    }
+  }
+  else{
+    account.name='未登入'
+    account.email = ''
+  }
+  return () => {
+    unsub();
+  }}
+);
+
 let units = [
   { title: '單元一', value: 1 },
   { title: '單元二', value: 2 }
 ]
 
-function checkAnswers() {
+async function checkAnswers() {
+  let correct=0;
   if (state.choice.value === 1) {
     state.message = []
     for (let i in state.exams) {
       if (state.answer[i] !== state.exams[i].answer) {
         state.message[i] = '不正確?'
       } else {
+        correct++;
         state.message[i] = '正確'
+        await updateDoc(doc(db, "Users", account.uid), {
+        animalapp_1:correct,
+      });
       }
     }
   } else {
@@ -59,6 +100,9 @@ function checkAnswers() {
       }
        if(correct == state.exams[i].answers.length){
         state.message[i] = '正確'
+        await updateDoc(doc(db, "Users", account.uid), {
+        animalapp_2:correct,
+      });
        }
        else {
         console.log(correct);
