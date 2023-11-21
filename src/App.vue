@@ -45,7 +45,7 @@ const auth = getAuth(app)
 
 const unsub = onAuthStateChanged(auth, async (user)=>{
   if (user) {
-    account.name = '已登入'
+    // account.name = ''
     account.email = user.email ? user.email : ''
     const userDoc = await getDoc(doc(db, "user", user.uid));
     console.log(user);
