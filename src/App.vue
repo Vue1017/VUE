@@ -3,7 +3,9 @@ import '@mdi/font/css/materialdesignicons.css'
 import { provide, reactive, readonly, ref } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
 import { getAuth, onAuthStateChanged,signOut } from 'firebase/auth'
-import { getDoc, doc, getFirestore } from 'firebase/firestore';
+
+import { query, collection, where, getDocs, getFirestore, doc, getDoc } from '@firebase/firestore';
+
 
 let drawer = ref(false);
 let choice = reactive({ title: '冷知識', value: "Question" });
@@ -13,25 +15,44 @@ let items = [
   { title: '動物常識', to: "/animalapp" }
 ]
 
-// const account = reactive({
-//   name: '彭于芳',
-//   email: 'prp00328evonne@gmail.com'})
-// provide(/* key */ 'account', /* value */ account)
+type state_type = {
+  choice: {title:string, value:number},
+  answer: string[],
+  answers: string[][],
+  message: string[],
+  exams: {number1:number,number2:number,title:string, answer:string, answers:string[], choice:string[]}[],
+  // question: {title:number}
+}
+const state:state_type = reactive({
+  choice: { title: '單元一', value: 1 },
+  answer: [''],
+  answers: [],
+  message: [''],
+  exams: [{number1:0 ,number2:0 ,title: '', answer:'', answers: [''], choice: ['', ''] }],
+  // question: [{title:0}]
+  // questionChoice: [{choice:''}]
+})
+
+const db = getFirestore(app);
 
 const account = reactive({
   name: '',
-  email: ''
+  email: '',
+  password: '',
+  uid:''
 })
 const auth = getAuth(app)
-const db = getFirestore(app)
-const unsub = onAuthStateChanged(auth, async(user) => {
+
+const unsub = onAuthStateChanged(auth, async (user)=>{
   if (user) {
-    // account.name = '已登入'
+    account.name = '已登入'
     account.email = user.email ? user.email : ''
-    const userDoc = await getDoc(doc(db, "Users", user.uid));
-    console.log(account.name);
+    const userDoc = await getDoc(doc(db, "user", user.uid));
+    console.log(user);
     if (userDoc.exists()) {
       account.name = userDoc.data().name? userDoc.data().name:''
+      account.uid = user.uid?user.uid:''
+
     }
     else{
       account.name = '未登入A'
@@ -43,16 +64,33 @@ const unsub = onAuthStateChanged(auth, async(user) => {
   }
   return () => {
     unsub();
-  }
-}
+  }}
 );
+
+async function next() {
+  const queryExam = query(collection(db, 'Users', account.uid))
+  const querySnapshot = await getDocs(queryExam)
+  querySnapshot.forEach((doc) => {
+    console.log('g', doc.data())
+    state.exams.push({
+      title: doc.data().title,
+      answers: doc.data().answer,
+      answer: doc.data().answer,
+      choice: doc.data().choice,
+      number1: doc.data().animalapp_1,
+      number2: doc.data().animalapp_2
+    })
+  })
+  // showNextButton.value = true;
+}
+
 // provide(/* key */ 'account', /* value */ account)
 provide(/* key */ 'account', /* value */ readonly(account))
 
 async function onClick(){
   await signOut(auth)
 }
-
+next()
 </script>
 
 <template>

@@ -52,7 +52,7 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
 
     if (userDoc.exists()) {
       account.name = userDoc.data().name? userDoc.data().name:''
-      account.email = user.uid?user.uid:''
+      account.uid = user.uid?user.uid:''
     }
     else{
       account.name = '未登入'
