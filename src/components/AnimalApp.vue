@@ -51,9 +51,9 @@ function checkAnswers() {
     for (let i in state.exams) {
       if (state.exams[i].answers.length === state.answers[i].length) {
         let correct = 0;
-      for (let j in state.exams[i].answers) {
+      for (let item of state.exams[i].answers) {
 
-        if(state.answer[i].includes(state.exams[i].answers[j])){
+        if(state.exams[i].answer.includes(item)){
          correct ++;
         }
       }
@@ -61,6 +61,7 @@ function checkAnswers() {
         state.message[i] = '正確'
        }
        else {
+        console.log(correct);
         state.message[i] = '不正確2'
        
       }  }
