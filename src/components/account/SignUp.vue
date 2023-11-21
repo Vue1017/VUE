@@ -98,6 +98,7 @@ async function handleClick(status: 'signIn' | 'signUp'| 'signOut') {
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
       <div></div>
       <div>
+        <v-text-field label="使用者名稱"></v-text-field>
         <v-text-field v-model="account.email" label="帳號"></v-text-field>
         <v-text-field v-model="account.password" label="密碼" type="password"></v-text-field>
         <v-alert :type="state.status" title="訊息" :text="state.message"></v-alert>
@@ -105,10 +106,10 @@ async function handleClick(status: 'signIn' | 'signUp'| 'signOut') {
       <div></div>
     </div>
     <center style="margin-top: 30px;">
-      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signIn')" >登入</v-btn>
+      <!-- <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signIn')" >登入</v-btn> -->
       <!-- <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signOut')">登出</v-btn> -->
-      <!-- <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signUp')">註冊</v-btn> -->
-      <router-link to="/signUp"><v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;">前往註冊</v-btn></router-link>
+      <router-link to="/account"><v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;">前往登入</v-btn></router-link>
+      <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;" @click="handleClick('signUp')">註冊</v-btn>
     </center>
   </v-container>
 </template>
