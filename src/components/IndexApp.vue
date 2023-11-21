@@ -98,7 +98,7 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
          知識學習區</p>
          <div>
             <h3>動物常識 單元一 答對題數：{{ account.animalapp_1 }}</h3>
-            <h3>動物常識 單元一 答對題數：{{ account.animalapp_2 }}</h3>
+            <h3>動物常識 單元二 答對題數：{{ account.animalapp_2 }}</h3>
          </div>
    </div>
    <div style="background-color: #F58D59; padding: 15px 20px 20px 20px;">
