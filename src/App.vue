@@ -3,7 +3,9 @@ import '@mdi/font/css/materialdesignicons.css'
 import { provide, reactive, readonly, ref } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
 import { getAuth, onAuthStateChanged,signOut } from 'firebase/auth'
+
 import { query, collection, where, getDocs, getFirestore, doc, getDoc } from '@firebase/firestore';
+
 
 let drawer = ref(false);
 let choice = reactive({ title: '冷知識', value: "Question" });
@@ -40,6 +42,7 @@ const account = reactive({
   uid:''
 })
 const auth = getAuth(app)
+
 const unsub = onAuthStateChanged(auth, async (user)=>{
   if (user) {
     account.name='已登入'
@@ -51,6 +54,7 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
     if (userDoc.exists()) {
       account.name = userDoc.data().name? userDoc.data().name:''
       account.uid = user.uid?user.uid:''
+
     }
     else{
       account.name = '未登入'

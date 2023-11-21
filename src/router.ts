@@ -32,11 +32,6 @@ const router = createRouter({
       name: 'account',
       component: () => import('./components/account/AccountApp.vue')
     },
-    {
-      path: '/signUp',
-      name: 'signUp',
-      component: () => import('./components/account/SignUp.vue')
-    },
   ]
 })
 
