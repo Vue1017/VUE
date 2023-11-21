@@ -68,11 +68,11 @@ async function onClick(){
 
     <v-main style="background-color: #fffcf0;">
       <div>
-        <v-container>
+        <!-- <v-container> -->
           <Suspense>
             <RouterView />
           </Suspense>
-        </v-container>
+        <!-- </v-container> -->
       </div>
      
     </v-main>
