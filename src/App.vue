@@ -19,26 +19,26 @@ let items = [
 // provide(/* key */ 'account', /* value */ account)
 
 const account = reactive({
-  name: '未登入',
+  name: '',
   email: ''
 })
 const auth = getAuth(app)
 const db = getFirestore(app)
 const unsub = onAuthStateChanged(auth, async(user) => {
   if (user) {
-    account.name = '已登入'
+    // account.name = '已登入'
     account.email = user.email ? user.email : ''
-    const userDoc = await getDoc(doc(db, "user", user.uid));
-    console.log(user);
+    const userDoc = await getDoc(doc(db, "Users", user.uid));
+    console.log(account.name);
     if (userDoc.exists()) {
       account.name = userDoc.data().name? userDoc.data().name:''
     }
     else{
-      account.name = '未登入'
+      account.name = '未登入A'
     }
   }
   else {
-    account.name = '未登入'
+    account.name = '未登入B'
     account.email = ''
   }
   return () => {

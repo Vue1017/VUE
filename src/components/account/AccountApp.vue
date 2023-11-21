@@ -6,7 +6,7 @@ import { FirebaseError } from 'firebase/app';
 import router from '@/router';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 
-const login = inject('account', { name: '未登入', email: '' })
+const login = inject('account', { name: '', email: '' })
 const account = reactive({
   name: '',
   email: '',
@@ -34,10 +34,13 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
     state.status = 'info'
     if (status === 'signUp') {
       state.message = '註冊中...'
+      const name = account.name;
       const res = await createUserWithEmailAndPassword(auth, account.email, account.password)
       const uid = res.user.uid;
+      
+      console.log(account.name)
       await setDoc(doc(db, "Users", uid), {
-        name: account.name
+        name: name
       });
       if (res.user) {
         state.status = 'success'
@@ -48,7 +51,7 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
       state.message = '登入中...'
       const res = await signInWithEmailAndPassword(auth, account.email, account.password)
       const uid = res.user.uid;
-      const userDoc = await getDoc(doc(db, "user", uid));
+      const userDoc = await getDoc(doc(db, "Users", uid));
       if (res.user) {
         if (userDoc.exists()) {
           account.name = userDoc.data().name ? userDoc.data().name : ''
