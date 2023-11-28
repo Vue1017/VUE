@@ -67,7 +67,7 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
 
 <template>
    <div style="display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 30px;">
-      <div style="padding: 220px 50px 50px 250px">
+      <div style="padding: 220px 50px 50px 250px; width: 700px">
          <p style="font-size: 50px; font-weight: bold;">用學習陪伴動物</p>
          <p style="font-size: 35.5px">與小孩共創成長回憶！</p>
       </div>

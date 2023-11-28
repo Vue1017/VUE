@@ -119,7 +119,7 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
 </script>
 <template>
   <v-container>
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; margin-top: 80px;">
       <div></div>
       <div>
         <v-text-field v-if="state.action !== 'signIn'" v-model="account.name" label="姓名"></v-text-field>
