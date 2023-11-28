@@ -4,7 +4,7 @@ import app from '@/components/settings/FirebaseConfig.vue'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth, } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app';
 import router from '@/router';
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, getDoc, getFirestore, increment, setDoc, updateDoc } from 'firebase/firestore';
 
 const login = inject('account', { name: '', email: '' })
 const account = reactive({
@@ -51,10 +51,15 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
       state.message = '登入中...'
       const res = await signInWithEmailAndPassword(auth, account.email, account.password)
       const uid = res.user.uid;
-      const userDoc = await getDoc(doc(db, "Users", uid));
+      const userRef = doc(db, "Users", uid);
+      const userDoc = await getDoc(userRef);
       if (res.user) {
         if (userDoc.exists()) {
           account.name = userDoc.data().name ? userDoc.data().name : ''
+
+        await updateDoc(userRef, {
+          loginCount: increment(1)
+      });
         }
         state.action = 'signOut'
         state.status = 'success'

@@ -12,7 +12,8 @@ let choice = reactive({ title: '冷知識', value: "Question" });
 let items = [
   { title: '冷知識', to: "/english" },
   { title: '冷知識2', to: "/fiveradio" },
-  { title: '動物常識', to: "/animalapp" }
+  { title: '動物常識', to: "/animalapp" },
+  { title: '個人資料', to: "/profileapp" }
 ]
 
 type state_type = {
