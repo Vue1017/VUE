@@ -43,6 +43,7 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
     account.email = user.email?user.email:''
     account.uid = user.uid?user.uid:''
     
+    
     const userDoc = await getDoc(doc(db, "Users", user.uid));
 
     if (userDoc.exists()) {
@@ -112,6 +113,7 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
   {{ account.animalapp_2 }}
   {{ account.loginCount }}
 </div>
+<a class="button" href="/updateprofile" >test</a>
 
 
 
