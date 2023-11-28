@@ -34,6 +34,7 @@ const account = reactive({
   uid:'',
   animalapp_1:0,
   animalapp_2:0,
+  loginCount:0,
 })
 const auth = getAuth(app)
 const unsub = onAuthStateChanged(auth, async (user)=>{
@@ -47,6 +48,8 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
     if (userDoc.exists()) {
       account.name = userDoc.data().name? userDoc.data().name:''
       account.uid = user.uid?user.uid:''
+      account.email = user.email?user.email:''
+      account.loginCount = userDoc.data().loginCount?userDoc.data().loginCount:''
       account.animalapp_1=userDoc.data().animalapp_1? userDoc.data().animalapp_1:0
       account.animalapp_2=userDoc.data().animalapp_2? userDoc.data().animalapp_2:0
     }
@@ -66,54 +69,51 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
 </script>
 
 <template>
+<div>
+  <table>
+    <tr>
+    <th>
+      冷知識
+
+    </th>
+    <th>
+      冷知識2
+    </th>
+    <th>
+      動物常識
+    </th>
+    </tr>
+<tr>
+  <td>
+    0
+  </td>
+  <td>
+    0
+  </td>
+  <td>
+    {{ account.animalapp_1 }}
+  </td>
+</tr>
+<tr>
+<td>
+    0
+  </td>
+  <td>
+    0
+  </td>
+  <td>
+    {{ account.animalapp_2 }}
+  </td>
+</tr>
+  </table>
+  {{ account.name }}
+  {{ account.email }}
+  {{ account.animalapp_1 }}
+  {{ account.animalapp_2 }}
+  {{ account.loginCount }}
+</div>
 
 
-  <div v-if="state.choice.value === 1">
-    <BookOne />
 
-    <div v-for="(exam, index) in state.exams" :key="index">
-      <v-radio-group
-        v-model="state.answer[index]"
-        :label="exam.title"
-        :messages="state.message[index]"
-      >
-        <v-radio
-          v-for="(c, index) in exam.choice"
-          :key="index"
-          v-model="state.answer[index]"
-          :value="c"
-          :label="c"
-        >
-        </v-radio>
-      </v-radio-group>
-    </div>
-  </div>
-
-  <div v-if="state.choice.value === 2">
-    <BookTwo />
-
-    <div v-for="(exam, index) in state.exams" :key="index">
-
-      <div
-
-        :label="exam.title"
-        :messages="state.message[index]"
-      >
-      {{ exam.title }}
-      {{ state.message[index] }}
-{{ state.answers[index] }}
-
-      <v-checkbox
-          v-for="(c, i) in exam.choice"
-          :key="i"
-          v-model="state.answers[index]"
-          :value="c"
-          :label="c"
-        >
-        </v-checkbox>
-      </div>
-
-    </div>
-  </div>
 
 </template>
