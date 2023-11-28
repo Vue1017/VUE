@@ -2,8 +2,7 @@
 import '@mdi/font/css/materialdesignicons.css'
 import { provide, reactive, readonly, ref } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
-import { getAuth, onAuthStateChanged,signOut } from 'firebase/auth'
-
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 import { query, collection, where, getDocs, getFirestore, doc, getDoc } from '@firebase/firestore';
 
 
@@ -13,23 +12,22 @@ let items = [
   { title: '冷知識', to: "/english" },
   { title: '冷知識2', to: "/fiveradio" },
   { title: '動物常識', to: "/animalapp" },
-  { title: '個人資料', to: "/profileapp" }
 ]
 
 type state_type = {
-  choice: {title:string, value:number},
+  choice: { title: string, value: number },
   answer: string[],
   answers: string[][],
   message: string[],
-  exams: {number1:number,number2:number,title:string, answer:string, answers:string[], choice:string[]}[],
+  exams: { number1: number, number2: number, title: string, answer: string, answers: string[], choice: string[] }[],
   // question: {title:number}
 }
-const state:state_type = reactive({
+const state: state_type = reactive({
   choice: { title: '單元一', value: 1 },
   answer: [''],
   answers: [],
   message: [''],
-  exams: [{number1:0 ,number2:0 ,title: '', answer:'', answers: [''], choice: ['', ''] }],
+  exams: [{ number1: 0, number2: 0, title: '', answer: '', answers: [''], choice: ['', ''] }],
   // question: [{title:0}]
   // questionChoice: [{choice:''}]
 })
@@ -40,22 +38,22 @@ const account = reactive({
   name: '',
   email: '',
   password: '',
-  uid:''
+  uid: ''
 })
 const auth = getAuth(app)
 
-const unsub = onAuthStateChanged(auth, async (user)=>{
+const unsub = onAuthStateChanged(auth, async (user) => {
   if (user) {
     // account.name = ''
     account.email = user.email ? user.email : ''
     const userDoc = await getDoc(doc(db, "user", user.uid));
     console.log(user);
     if (userDoc.exists()) {
-      account.name = userDoc.data().name? userDoc.data().name:''
-      account.uid = user.uid?user.uid:''
+      account.name = userDoc.data().name ? userDoc.data().name : ''
+      account.uid = user.uid ? user.uid : ''
 
     }
-    else{
+    else {
       account.name = '未登入A'
     }
   }
@@ -65,7 +63,8 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
   }
   return () => {
     unsub();
-  }}
+  }
+}
 );
 
 async function next() {
@@ -88,7 +87,7 @@ async function next() {
 // provide(/* key */ 'account', /* value */ account)
 provide(/* key */ 'account', /* value */ readonly(account))
 
-async function onClick(){
+async function onClick() {
   await signOut(auth)
 }
 next()
@@ -97,18 +96,24 @@ next()
 <template>
   <v-app class="rounded rounded-md">
     <v-app-bar display="flex" justify-content=" space-between" background-color="#fffcf0">
-      <router-link to="/index"><img src="./assets/logo.PNG" style="height: 60px; margin-left: 10px;" /></router-link>
+      <router-link to="/"><img src="./assets/logo.PNG" style="height: 60px; margin-left: 10px;" /></router-link>
       <v-spacer></v-spacer>
       <div id="btn">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <router-link to="/Account">
-          <v-btn v-if="account.email==''" style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #f58d59; color: white; font-weight: bold;">登入</v-btn>
-          <v-btn v-else style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #f58d59; color: white; font-weight: bold;" @click="onClick()">登出</v-btn>
+          <v-btn v-if="account.email == ''"
+            style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #f58d59; color: white; font-weight: bold;">登入</v-btn>
+          <v-btn v-else
+            style="margin: 0px 20px 0px 10px; padding: 5px; background-color: #f58d59; color: white; font-weight: bold;"
+            @click="onClick()">登出</v-btn>
         </router-link>
       </div>
     </v-app-bar>
     <v-navigation-drawer floating permanent v-model="drawer" style="border: 1px solid lightgray;">
       <v-list>
+        <v-list-item style="background-color: #F58D59; color: white; font-weight: bold; " to="/profileapp">
+          個人檔案
+        </v-list-item>
         <v-list-item v-for="item in items" :title="item.title" :key="item.title" :to="item.to">
         </v-list-item>
       </v-list>
@@ -117,12 +122,12 @@ next()
     <v-main style="background-color: #fffcf0;">
       <div>
         <!-- <v-container> -->
-          <Suspense>
-            <RouterView />
-          </Suspense>
+        <Suspense>
+          <RouterView />
+        </Suspense>
         <!-- </v-container> -->
       </div>
-     
+
     </v-main>
   </v-app>
 </template>
