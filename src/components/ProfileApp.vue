@@ -38,8 +38,8 @@ const account = reactive({
   animalapp_2: 0,
   animalapp1_f: 0,
   animalapp2_f: 0,
-  animal1_count:0,
-  animal2_count:0,
+  animal1_count: 0,
+  animal2_count: 0,
   loginCount: 0,
 })
 const auth = getAuth(app)
@@ -76,15 +76,22 @@ const unsub = onAuthStateChanged(auth, async (user) => {
 }
 );
 
-//const cityRef = doc(db, 'Users', account.uid);
 async function onClick() {
+  const userDocRef = doc(db, "Users", account.uid);
 
-  // await updateDoc(cityRef, {
-  //   tel: deleteField()
-  // }
-  // );
+  try {
+    await updateDoc(userDocRef, {
+      tel: deleteField()
+    });
 
+    account.tel = '';
+  } catch (error) {
+    console.error("刪除錯誤");
+  }
 }
+
+
+
 
 </script>
 
@@ -105,10 +112,10 @@ async function onClick() {
           <p>電子郵件：{{ account.email }}</p>
           <div style="display: flex; justify-content: space-between;">
             <div style="display: flex;">
-              <p>聯絡電話：{{ account.tel }}</p>
-              <v-btn style="margin-right:50px;margin-top: 10px;" @click="onClick">刪</v-btn>
+              <p>聯絡電話：{{ account.tel }}</p>&nbsp;
+              <v-btn style="margin-right:50px;margin-top: 10px;height: 25px;" @click="onClick">刪除</v-btn>
             </div>
-            <v-btn style="margin-right:50px;margin-top: 10px;" href="/AddTel">新增</v-btn>
+            <v-btn style="margin-right:50px;margin-top: 10px;height: 25px;" href="/AddTel">新增</v-btn>
           </div>
           <p>登入次數：{{ account.loginCount }}</p>
         </div>
@@ -160,7 +167,7 @@ async function onClick() {
                   <tbody style="text-align: center;">
                     <tr>
                       <td>對/錯</td>
-                      <td>{{ account.animalapp_1 }}/{{account.animalapp1_f}}</td>
+                      <td>{{ account.animalapp_1 }}/{{ account.animalapp1_f }}</td>
                     </tr>
                   </tbody>
                   <thead>
@@ -172,7 +179,7 @@ async function onClick() {
                   <tbody style="text-align: center;">
                     <tr>
                       <td>對/錯</td>
-                      <td>{{ account.animalapp_2 }}/{{account.animalapp2_f}}</td>
+                      <td>{{ account.animalapp_2 }}/{{ account.animalapp2_f }}</td>
                     </tr>
                   </tbody>
                 </table>
