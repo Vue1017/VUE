@@ -5,6 +5,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import app from '@/components/settings/FirebaseConfig.vue'
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import { FirebaseError } from 'firebase/app';
+import router from '@/router';
 
 const db = getFirestore(app);
 
@@ -70,6 +71,7 @@ async function handleClick(){
       name: account.name
     });
     state.message = '更新成功'
+    router.push("/ProfileApp");
   } catch(e){
     if (e instanceof FirebaseError) {
       state.message = e.message
