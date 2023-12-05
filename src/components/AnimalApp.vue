@@ -74,24 +74,23 @@ let units = [
 
 async function checkAnswers() {
   let correct=0;
-  let incorrect=0;
   if (state.choice.value === 1) {
     state.message = []
     for (let i in state.exams) {
-      if (state.answer[i] !== state.exams[i].answer) {
-        state.message[i] = '不正確?'
-        await updateDoc(doc(db, "Users", account.uid), {
-        animalapp1:incorrect,
-      });
-      } else {
+      if (state.answer[i] == state.exams[i].answer) {
         correct++;
-        state.message[i] = '正確'
-        await updateDoc(doc(db, "Users", account.uid), {
-        animalapp1_f:correct,
-      });
+        state.message[i] = '正確'     
+      } else {
+      state.message[i] = '不正確?'
       }
     }
+    let incorrect=2-correct;
+    await updateDoc(doc(db, "Users", account.uid), {
+        animalapp_1:correct,
+        animalapp1_f:incorrect
+      });
   } else {
+    let correctCount=0;
     state.message = []
     for (let i in state.exams) {
       if (state.exams[i].answers.length === state.answers[i].length) {
@@ -104,25 +103,21 @@ async function checkAnswers() {
       }
        if(correct == state.exams[i].answers.length){
         state.message[i] = '正確'
-        await updateDoc(doc(db, "Users", account.uid), {
-        animalapp_2:correct,
-      });
+        correctCount++;
        }
        else {
         console.log(correct);
         state.message[i] = '不正確2'
-        await updateDoc(doc(db, "Users", account.uid), {
-        animalapp2_f:incorrect,
-      });
-       
       }  }
       else {
         state.message[i] = '不正確1'
-        await updateDoc(doc(db, "Users", account.uid), {
-        animalapp2_f:incorrect,
-      });
        }
     }
+    let incorrect = 2-correctCount;
+    await updateDoc(doc(db, "Users", account.uid), {
+      animalapp_2:correctCount,
+      animalapp2_f:incorrect,
+      });
   }
 }
 
