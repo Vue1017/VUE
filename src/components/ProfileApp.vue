@@ -4,6 +4,7 @@ import { reactive } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, doc, getDoc } from '@firebase/firestore';
+import { deleteDoc, deleteField, updateDoc } from 'firebase/firestore';
 
 type state_type = {
   choice: { title: string, value: number },
@@ -45,6 +46,7 @@ const account = reactive({
   QA2_f:0,
   QA1_count:0,
   QA2_count:0,
+
   loginCount: 0,
 })
 const auth = getAuth(app)
@@ -87,6 +89,23 @@ const unsub = onAuthStateChanged(auth, async (user) => {
 }
 );
 
+async function onClick() {
+  const userDocRef = doc(db, "Users", account.uid);
+
+  try {
+    await updateDoc(userDocRef, {
+      tel: deleteField()
+    });
+
+    account.tel = '';
+  } catch (error) {
+    console.error("刪除錯誤");
+  }
+}
+
+
+
+
 </script>
 
 <template>
@@ -105,8 +124,11 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                 src="../assets/pen.png" style="width: 19px;"></a></p>
           <p>電子郵件：{{ account.email }}</p>
           <div style="display: flex; justify-content: space-between;">
-            <p>聯絡電話：{{ account.tel }}</p>
-            <v-btn style="margin-right:50px;margin-top: 10px;" href="/AddTel">新增</v-btn>
+            <div style="display: flex;">
+              <p>聯絡電話：{{ account.tel }}</p>&nbsp;
+              <v-btn style="margin-right:50px;margin-top: 10px;height: 25px;" @click="onClick">刪除</v-btn>
+            </div>
+            <v-btn style="margin-right:50px;margin-top: 10px;height: 25px;" href="/AddTel">新增</v-btn>
           </div>
           <p>登入次數：{{ account.loginCount }}</p>
         </div>
@@ -157,8 +179,10 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                   </thead>
                   <tbody style="text-align: center;">
                     <tr>
+
                       <td>{{account.QA1}}/{{ account.QA1_f }}</td>
                       <td>{{ account.animalapp_1 }}/{{account.animalapp1_f}}</td>
+
                     </tr>
                   </tbody>
                   <thead>
@@ -169,8 +193,10 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                   </thead>
                   <tbody style="text-align: center;">
                     <tr>
+
                       <td>{{account.QA2}}/{{ account.QA2_f }}</td>
                       <td>{{ account.animalapp_2 }}/{{account.animalapp2_f}}</td>
+
                     </tr>
                   </tbody>
                 </table>
