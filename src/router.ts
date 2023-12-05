@@ -42,6 +42,11 @@ const router = createRouter({
       name: 'updateprofile',
       component: () => import('./components/account/UpdateProfile.vue')
     },
+    {
+      path: '/AddTel',
+      name: 'Addtel',
+      component: () => import('./components/AddTel.vue')
+    },
   ]
 })
 
