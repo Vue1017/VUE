@@ -42,6 +42,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
          account.name = userDoc.data().name ? userDoc.data().name : ''
          account.uid = user.uid ? user.uid : ''
          account.email = user.email ? user.email : ''
+         account.tel = userDoc.data().tel ? userDoc.data().tel : ''
 
       }
       else {
@@ -98,7 +99,7 @@ async function handleClick() {
 <template>
    <div>
       <v-container>
-         <v-text-field v-model=account.tel label="電話"></v-text-field>
+         <v-text-field v-model="account.tel" label="電話"></v-text-field>
          {{ state.message }}
          <v-btn color="primary" @click="handleClick()">新增</v-btn>
          <v-btn color="secondary">回首頁</v-btn>
