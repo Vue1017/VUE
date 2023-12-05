@@ -74,7 +74,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
   <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
     <div></div>
     <div
-      style="background-color: #f58d59; width: 100%; height: 550px; padding-top: 5px; border-radius: 80px; margin-top: 40px;">
+      style="background-color: #f58d59; width: 510px; height: 550px; padding-top: 5px; border-radius: 80px; margin-top: 40px;">
       <center>
         <p
           style="color: white; font-weight: bold; font-size: 25px; background-color: #844200; width: 160px; border-radius: 30px; margin-bottom: 15px; line-height: 40px; margin-top: 10px;">
@@ -85,37 +85,75 @@ const unsub = onAuthStateChanged(auth, async (user) => {
           <p>姓名：{{ account.name }}<a class="button" href="/updateprofile" style="margin-left: 5px;"><img
                 src="../assets/pen.png" style="width: 19px;"></a></p>
           <p>電子郵件：{{ account.email }}</p>
+          <p>聯絡電話：</p>
           <p>登入次數：{{ account.loginCount }}</p>
-          <p>答題記錄：</p>
         </div>
-        <div style="margin-top: 8px; margin-left: 23%;">
-          <div>
-            <table style="background-color: #FEF1E6; border-radius: 20px;">
-              <thead>
-                <tr>
-                  <th style="width: 120px">冷知識</th>
-                  <th style="width: 150px">動物常識一</th>
-                </tr>
-              </thead>
-              <tbody style="text-align: center;">
-                <tr>
-                  <td>0</td>
-                  <td>{{ account.animalapp_1 }}</td>
-                </tr>
-              </tbody>
-              <thead>
-                <tr>
-                  <th>冷知識2</th>
-                  <th>動物常識二</th>
-                </tr>
-              </thead>
-              <tbody style="text-align: center;">
-                <tr>
-                  <td>0</td>
-                  <td>{{ account.animalapp_2 }}</td>
-                </tr>
-              </tbody>
-            </table>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; margin: 0px 40px 0px 40px;">
+          <div style="margin-right: 5px;">
+            <div style="margin-top: 8px">
+              <p>【答題記錄】</p>
+              <div>
+                <table style="background-color: #FEF1E6; border-radius: 20px;">
+                  <thead>
+                    <tr>
+                      <th style="width: 120px">冷知識</th>
+                      <th style="width: 150px">動物常識(一)</th>
+                    </tr>
+                  </thead>
+                  <tbody style="text-align: center;">
+                    <tr>
+                      <td>0</td>
+                      <td>{{ account.animalapp_1 }}</td>
+                    </tr>
+                  </tbody>
+                  <thead>
+                    <tr>
+                      <th>冷知識2</th>
+                      <th>動物常識(二)</th>
+                    </tr>
+                  </thead>
+                  <tbody style="text-align: center;">
+                    <tr>
+                      <td>0</td>
+                      <td>{{ account.animalapp_2 }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 5px;">
+            <div style="margin-top: 8px;">
+              <p>【答對/答錯記錄】</p>
+              <div>
+                <table style="background-color: #FEF1E6; border-radius: 20px;">
+                  <thead>
+                    <tr>
+                      <th style="width: 120px">冷知識2(一)</th>
+                      <th style="width: 150px">動物常識(一)</th>
+                    </tr>
+                  </thead>
+                  <tbody style="text-align: center;">
+                    <tr>
+                      <td>對/錯</td>
+                      <td>對/錯</td>
+                    </tr>
+                  </tbody>
+                  <thead>
+                    <tr>
+                      <th>冷知識2(二)</th>
+                      <th>動物常識(二)</th>
+                    </tr>
+                  </thead>
+                  <tbody style="text-align: center;">
+                    <tr>
+                      <td>對/錯</td>
+                      <td>對/錯</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
