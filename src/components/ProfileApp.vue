@@ -52,6 +52,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
       account.name = userDoc.data().name ? userDoc.data().name : ''
       account.uid = user.uid ? user.uid : ''
       account.email = user.email ? user.email : ''
+      account.tel = userDoc.data().tel ? userDoc.data().tel : ''
       account.loginCount = userDoc.data().loginCount ? userDoc.data().loginCount : ''
       account.animalapp_1 = userDoc.data().animalapp_1 ? userDoc.data().animalapp_1 : 0
       account.animalapp_2 = userDoc.data().animalapp_2 ? userDoc.data().animalapp_2 : 0
