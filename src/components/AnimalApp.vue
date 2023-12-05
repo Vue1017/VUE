@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, watch, ref } from 'vue'
 import app from '@/components/settings/FirebaseConfig.vue'
-import { collection, getDocs, getFirestore, where, query, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, getFirestore, where, query, doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore'
 import BookOne from '@/components/bookOne.vue'
 import BookTwo from '@/components/bookTwo.vue'
 import { getAuth, onAuthStateChanged } from '@firebase/auth'
@@ -28,7 +28,8 @@ const account = reactive({
   name: '',
   email: '',
   password: '',
-  uid:''
+  uid:'',
+  answerQA:0,
 })
 
 const auth = getAuth(app)
@@ -53,6 +54,7 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
     if (userDoc.exists()) {
       account.name = userDoc.data().name? userDoc.data().name:''
       account.uid = user.uid?user.uid:''
+      account.answerQA = userDoc.data().animal1_count? userDoc.data().animal1_count:''
     }
     else{
       account.name = '未登入'
@@ -87,7 +89,8 @@ async function checkAnswers() {
     let incorrect=2-correct;
     await updateDoc(doc(db, "Users", account.uid), {
         animalapp_1:correct,
-        animalapp1_f:incorrect
+        animalapp1_f:incorrect,
+        animal1_count:increment(1),
       });
   } else {
     let correctCount=0;
@@ -115,8 +118,9 @@ async function checkAnswers() {
     }
     let incorrect = 2-correctCount;
     await updateDoc(doc(db, "Users", account.uid), {
-      animalapp_2:correctCount,
+      animalapp_2:correct,
       animalapp2_f:incorrect,
+      animal2_count:increment(1),
       });
   }
 }

@@ -36,6 +36,10 @@ const account = reactive({
   tel: '',
   animalapp_1: 0,
   animalapp_2: 0,
+  animalapp1_f: 0,
+  animalapp2_f: 0,
+  animal1_count:0,
+  animal2_count:0,
   loginCount: 0,
 })
 const auth = getAuth(app)
@@ -44,9 +48,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
     account.name = '已登入'
     account.email = user.email ? user.email : ''
     account.uid = user.uid ? user.uid : ''
-
     const userDoc = await getDoc(doc(db, "Users", user.uid));
-
     if (userDoc.exists()) {
       account.name = userDoc.data().name ? userDoc.data().name : ''
       account.uid = user.uid ? user.uid : ''
@@ -55,6 +57,10 @@ const unsub = onAuthStateChanged(auth, async (user) => {
       account.loginCount = userDoc.data().loginCount ? userDoc.data().loginCount : ''
       account.animalapp_1 = userDoc.data().animalapp_1 ? userDoc.data().animalapp_1 : 0
       account.animalapp_2 = userDoc.data().animalapp_2 ? userDoc.data().animalapp_2 : 0
+      account.animalapp1_f = userDoc.data().animalapp1_f ? userDoc.data().animalapp1_f : 0
+      account.animalapp2_f = userDoc.data().animalapp2_f ? userDoc.data().animalapp2_f : 0
+      account.animal1_count = userDoc.data().animal1_count ? userDoc.data().animal1_count : 0
+      account.animal2_count = userDoc.data().animal2_count ? userDoc.data().animal2_count : 0
     }
     else {
       account.name = '未登入'
@@ -121,7 +127,7 @@ async function onClick() {
                   <tbody style="text-align: center;">
                     <tr>
                       <td>0</td>
-                      <td>{{ account.animalapp_1 }}</td>
+                      <td>{{ account.animal1_count }}</td>
                     </tr>
                   </tbody>
                   <thead>
@@ -133,7 +139,7 @@ async function onClick() {
                   <tbody style="text-align: center;">
                     <tr>
                       <td>0</td>
-                      <td>{{ account.animalapp_2 }}</td>
+                      <td>{{ account.animal2_count }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -154,7 +160,7 @@ async function onClick() {
                   <tbody style="text-align: center;">
                     <tr>
                       <td>對/錯</td>
-                      <td>對/錯</td>
+                      <td>{{ account.animalapp_1 }}/{{account.animalapp1_f}}</td>
                     </tr>
                   </tbody>
                   <thead>
@@ -166,7 +172,7 @@ async function onClick() {
                   <tbody style="text-align: center;">
                     <tr>
                       <td>對/錯</td>
-                      <td>對/錯</td>
+                      <td>{{ account.animalapp_2 }}/{{account.animalapp2_f}}</td>
                     </tr>
                   </tbody>
                 </table>
