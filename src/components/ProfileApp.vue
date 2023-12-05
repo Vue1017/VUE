@@ -4,6 +4,7 @@ import { reactive } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, doc, getDoc } from '@firebase/firestore';
+import { deleteDoc, deleteField, updateDoc } from 'firebase/firestore';
 
 type state_type = {
   choice: { title: string, value: number },
@@ -69,6 +70,16 @@ const unsub = onAuthStateChanged(auth, async (user) => {
 }
 );
 
+//const cityRef = doc(db, 'Users', account.uid);
+async function onClick() {
+
+  // await updateDoc(cityRef, {
+  //   tel: deleteField()
+  // }
+  // );
+
+}
+
 </script>
 
 <template>
@@ -87,7 +98,10 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                 src="../assets/pen.png" style="width: 19px;"></a></p>
           <p>電子郵件：{{ account.email }}</p>
           <div style="display: flex; justify-content: space-between;">
-            <p>聯絡電話：{{ account.tel }}</p>
+            <div style="display: flex;">
+              <p>聯絡電話：{{ account.tel }}</p>
+              <v-btn style="margin-right:50px;margin-top: 10px;" @click="onClick">刪</v-btn>
+            </div>
             <v-btn style="margin-right:50px;margin-top: 10px;" href="/AddTel">新增</v-btn>
           </div>
           <p>登入次數：{{ account.loginCount }}</p>
