@@ -32,6 +32,7 @@ const account = reactive({
   email: '',
   password: '',
   uid: '',
+  tel: '',
   animalapp_1: 0,
   animalapp_2: 0,
   loginCount: 0,
@@ -42,7 +43,6 @@ const unsub = onAuthStateChanged(auth, async (user) => {
     account.name = '已登入'
     account.email = user.email ? user.email : ''
     account.uid = user.uid ? user.uid : ''
-
 
     const userDoc = await getDoc(doc(db, "Users", user.uid));
 
@@ -85,7 +85,10 @@ const unsub = onAuthStateChanged(auth, async (user) => {
           <p>姓名：{{ account.name }}<a class="button" href="/updateprofile" style="margin-left: 5px;"><img
                 src="../assets/pen.png" style="width: 19px;"></a></p>
           <p>電子郵件：{{ account.email }}</p>
-          <p>聯絡電話：</p>
+          <div style="display: flex; justify-content: space-between;">
+            <p>聯絡電話：{{ account.tel }}</p>
+            <v-btn style="margin-right:50px;margin-top: 10px;" href="/AddTel">新增</v-btn>
+          </div>
           <p>登入次數：{{ account.loginCount }}</p>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; margin: 0px 40px 0px 40px;">
