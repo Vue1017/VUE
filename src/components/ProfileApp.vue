@@ -39,6 +39,12 @@ const account = reactive({
   animalapp2_f: 0,
   animal1_count:0,
   animal2_count:0,
+  QA1:0,
+  QA2:0,
+  QA1_f:0,
+  QA2_f:0,
+  QA1_count:0,
+  QA2_count:0,
   loginCount: 0,
 })
 const auth = getAuth(app)
@@ -60,6 +66,12 @@ const unsub = onAuthStateChanged(auth, async (user) => {
       account.animalapp2_f = userDoc.data().animalapp2_f ? userDoc.data().animalapp2_f : 0
       account.animal1_count = userDoc.data().animal1_count ? userDoc.data().animal1_count : 0
       account.animal2_count = userDoc.data().animal2_count ? userDoc.data().animal2_count : 0
+      account.QA1 = userDoc.data().QA1 ? userDoc.data().QA1 : 0
+      account.QA2 = userDoc.data().QA2 ? userDoc.data().QA2 : 0
+      account.QA1_f = userDoc.data().QA1_f ? userDoc.data().QA1_f : 0
+      account.QA2_f = userDoc.data().QA2_f ? userDoc.data().QA2_f : 0
+      account.QA1_count = userDoc.data().QA1_count ? userDoc.data().QA1_count : 0
+      account.QA2_count = userDoc.data().QA2_count ? userDoc.data().QA2_count : 0 
     }
     else {
       account.name = '未登入'
@@ -112,7 +124,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                   </thead>
                   <tbody style="text-align: center;">
                     <tr>
-                      <td>0</td>
+                      <td>{{ account.QA1_count }}</td>
                       <td>{{ account.animal1_count }}</td>
                     </tr>
                   </tbody>
@@ -124,7 +136,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                   </thead>
                   <tbody style="text-align: center;">
                     <tr>
-                      <td>0</td>
+                      <td>{{ account.QA2_count }}</td>
                       <td>{{ account.animal2_count }}</td>
                     </tr>
                   </tbody>
@@ -145,7 +157,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                   </thead>
                   <tbody style="text-align: center;">
                     <tr>
-                      <td>對/錯</td>
+                      <td>{{account.QA1}}/{{ account.QA1_f }}</td>
                       <td>{{ account.animalapp_1 }}/{{account.animalapp1_f}}</td>
                     </tr>
                   </tbody>
@@ -157,7 +169,7 @@ const unsub = onAuthStateChanged(auth, async (user) => {
                   </thead>
                   <tbody style="text-align: center;">
                     <tr>
-                      <td>對/錯</td>
+                      <td>{{account.QA2}}/{{ account.QA2_f }}</td>
                       <td>{{ account.animalapp_2 }}/{{account.animalapp2_f}}</td>
                     </tr>
                   </tbody>
