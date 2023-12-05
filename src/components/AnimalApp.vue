@@ -74,16 +74,20 @@ let units = [
 
 async function checkAnswers() {
   let correct=0;
+  let incorrect=0;
   if (state.choice.value === 1) {
     state.message = []
     for (let i in state.exams) {
       if (state.answer[i] !== state.exams[i].answer) {
         state.message[i] = '不正確?'
+        await updateDoc(doc(db, "Users", account.uid), {
+        animalapp1:incorrect,
+      });
       } else {
         correct++;
         state.message[i] = '正確'
         await updateDoc(doc(db, "Users", account.uid), {
-        animalapp_1:correct,
+        animalapp1_f:correct,
       });
       }
     }
@@ -107,11 +111,16 @@ async function checkAnswers() {
        else {
         console.log(correct);
         state.message[i] = '不正確2'
+        await updateDoc(doc(db, "Users", account.uid), {
+        animalapp2_f:incorrect,
+      });
        
       }  }
       else {
         state.message[i] = '不正確1'
-     
+        await updateDoc(doc(db, "Users", account.uid), {
+        animalapp2_f:incorrect,
+      });
        }
     }
   }
