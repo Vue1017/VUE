@@ -34,7 +34,7 @@ const account = reactive({
 
 const auth = getAuth(app)
 const db = getFirestore(app);
-generateQuestions()
+// generateQuestions()
 
 // let questionChoice = [
 //   { options: ["老鼠", "鴨嘴獸", "大象", "南極藍鯨"] , unit:1},
@@ -128,23 +128,6 @@ async function checkAnswers() {
 }
 
 async function next() {
-  const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice.value))
-  const querySnapshot = await getDocs(queryExam)
-  querySnapshot.forEach((doc) => {
-    console.log('g', doc.data())
-    state.exams.push({
-      title: doc.data().title,
-      answers: doc.data().answer,
-      answer: doc.data().answer,
-      choice: doc.data().choice
-    })
-  })
-  showNextButton.value = true;
-}
-
-watch(() => state.choice.value, generateQuestions)
-async function generateQuestions() {
-  console.log('choice', state.choice)
   state.exams = []
   const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice.value))
   const querySnapshot = await getDocs(queryExam)
@@ -160,9 +143,30 @@ async function generateQuestions() {
     })
     i++;
   })
+  showNextButton.value = true;
 }
 
-const showNextButton = ref(true)
+// watch(() => state.choice.value, generateQuestions)
+// async function generateQuestions() {
+//   console.log('choice', state.choice)
+//   state.exams = []
+//   const queryExam = query(collection(db, 'Animal'), where('unit', '==', state.choice.value))
+//   const querySnapshot = await getDocs(queryExam)
+//   let i = 0;
+//   querySnapshot.forEach((doc) => {
+//     console.log('g', doc.data())
+//     state.answers.push([])
+//     state.exams.push({
+//       title: doc.data().title,
+//       answers: doc.data().answer,
+//       answer: doc.data().answer,
+//       choice: doc.data().choice
+//     })
+//     i++;
+//   })
+// }
+
+const showNextButton = ref(false)
 </script>
 
 <template>
@@ -174,22 +178,24 @@ const showNextButton = ref(true)
 
       <div v-if="state.choice.value === 1">
         <BookOne />
-        <v-btn style="margin: 15px 0px 15px 0px;" @click="next" v-if="showNextButton">查看問題</v-btn>
+        <v-btn style="margin: 15px 0px 15px 0px;" @click="next" >查看問題</v-btn>
+        <!-- <div v-if="showNextButton"> -->
         <div v-for="(exam, index) in state.exams" :key="index">
-          <v-radio-group v-model="state.answer[index]" :label="exam.title" :messages="state.message[index]">
+          <v-radio-group v-model="state.answer[index]" :label="exam.title" :messages="state.message[index]" v-if="showNextButton">
             <v-radio v-for="(c, index) in exam.choice" :key="index" v-model="state.answer[index]" :value="c" :label="c">
             </v-radio>
           </v-radio-group>
         </div>
+        <!-- </div> -->
       </div>
 
       <div v-if="state.choice.value === 2">
         <BookTwo />
-        <v-btn style="margin: 15px 0px 15px 0px" @click="next" v-if="showNextButton">查看問題</v-btn>
+        <v-btn style="margin: 15px 0px 15px 0px" @click="next" >查看問題</v-btn>
         <div v-for="(exam, index) in state.exams" :key="index">
-          <div :label="exam.title" :messages="state.message[index]">
+          <div :label="exam.title" :messages="state.message[index]" v-if="showNextButton">
             <p style="text-align: left; font-weight: bold">{{ exam.title }}</p>
-            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;" >
               <p>你選擇的答案：{{ state.answers[index] }}</p>
               <p>答題結果：{{ state.message[index] }}</p>
             </div>
