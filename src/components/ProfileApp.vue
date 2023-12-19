@@ -121,7 +121,7 @@ async function onClick() {
       </center>
       <div style="margin-top: 30px; line-height: 46px; font-weight: bold;">
         <div style="font-size: 18px; margin-left: 15%;">
-          <p>姓名：{{ account.name }}<a class="button" href="/updateprofile" style="margin-left: 5px;"><img
+          <p>姓名：{{ account.name }}<a class="button" href="./updateprofile" style="margin-left: 5px;"><img
                 src="../assets/pen.png" style="width: 19px;"></a></p>
           <p>電子郵件：{{ account.email }}</p>
           <div style="display: flex; justify-content: space-between;">
@@ -129,7 +129,7 @@ async function onClick() {
               <p>聯絡電話：{{ account.tel }}</p>&nbsp;
               <v-btn style="margin-right:50px;margin-top: 10px;height: 25px;" @click="onClick">刪除</v-btn>
             </div>
-            <v-btn style="margin-right:50px;margin-top: 10px;height: 25px;" href="/AddTel">新增</v-btn>
+            <v-btn style="margin-right:50px;margin-top: 10px;height: 25px;" href="./AddTel">新增</v-btn>
           </div>
           <p>登入次數：{{ account.loginCount }}</p>
         </div>
