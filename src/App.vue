@@ -96,7 +96,7 @@ next()
 <template>
   <v-app class="rounded rounded-md">
     <v-app-bar display="flex" justify-content=" space-between" background-color="#fffcf0">
-      <router-link to="/"><img src="./assets/logo.PNG" style="height: 60px; margin-left: 10px;" /></router-link>
+      <router-link to="/"><img src="./assets/logo.png" style="height: 60px; margin-left: 10px;" /></router-link>
       <v-spacer></v-spacer>
       <div id="btn">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
