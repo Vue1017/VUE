@@ -9,8 +9,8 @@ import { query, collection, where, getDocs, getFirestore, doc, getDoc } from '@f
 let drawer = ref(false);
 let choice = reactive({ title: '冷知識', value: "Question" });
 let items = [
-  { title: '冷知識', to: "/english" },
-  { title: '冷知識2', to: "/fiveradio" },
+  { title: '冷知識', to: "/fiveradio" },
+  { title: '動物英文', to: "/english" },
   { title: '動物常識', to: "/animalapp" },
 ]
 

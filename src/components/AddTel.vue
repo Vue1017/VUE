@@ -18,10 +18,10 @@ const db = getFirestore(app);
 //   animalapp_2:0,
 //   loginCount:0,
 // })
-const login = inject('account', { name: '未登入',email:'', tel: '', uid: '' })
+const login = inject('account', { name: '未登入', email: '', tel: '', uid: '' })
 const account = reactive({
    name: '未登入',
-   email:'',
+   email: '',
    tel: '',
    uid: '',
 
@@ -100,12 +100,20 @@ async function handleClick() {
 </script>
 <template>
    <div>
-      <v-container>
-         <v-text-field v-model="account.tel" label="電話"></v-text-field>
-         {{ state.message }}
-         <v-btn color="primary" @click="handleClick()">新增</v-btn>
-         <v-btn color="secondary">回首頁</v-btn>
-      </v-container>
+      <center>
+         <div style="width: 50%; margin-top: 80px;">
+            <v-text-field v-model="account.tel" label="電話"></v-text-field>
+            <p>
+               {{ state.message }}
+            </p>
+            <div style="margin-top: 20px;">
+               <router-link to="/">
+                  <v-btn color="secondary" style="margin-right: 10px;">回首頁</v-btn>
+               </router-link>
+               <v-btn color="primary" @click="handleClick()">新增</v-btn>
+            </div>
+         </div>
+      </center>
 
 
       <!-- <v-container>

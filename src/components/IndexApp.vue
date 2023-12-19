@@ -1,66 +1,69 @@
 <script setup lang="ts">
 import '@mdi/font/css/materialdesignicons.css'
-import { reactive} from "vue";
+import { reactive } from "vue";
 import app from '@/components/settings/FirebaseConfig.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, doc, getDoc } from '@firebase/firestore';
+import BookOneVue from './bookOne.vue';
+import BookTwoVue from './bookTwo.vue';
 
 type state_type = {
-  choice: {title:string, value:number},
-  answer: string[],
-  answers: string[][],
-  message: string[],
-  exams: {number1:string,number2:string,title:string, answer:string, answers:string[], choice:string[]}[],
-  question:{  number1: number, number2: number,}[]
+   choice: { title: string, value: number },
+   answer: string[],
+   answers: string[][],
+   message: string[],
+   exams: { number1: string, number2: string, title: string, answer: string, answers: string[], choice: string[] }[],
+   question: { number1: number, number2: number, }[]
 
-  // question: {title:number}
+   // question: {title:number}
 }
-const state:state_type = reactive({
-  choice: { title: '單元一', value: 1 },
-  answer: [''],
-  answers: [],
-  message: [''],
-  exams: [{number1:'' ,number2:'' ,title: '', answer:'', answers: [''], choice: ['', ''] }],
-  question:[{  number1: 0, number2: 0,}]
-  // question: [{title:0}]
-  // questionChoice: [{choice:''}]
+const state: state_type = reactive({
+   choice: { title: '單元一', value: 1 },
+   answer: [''],
+   answers: [],
+   message: [''],
+   exams: [{ number1: '', number2: '', title: '', answer: '', answers: [''], choice: ['', ''] }],
+   question: [{ number1: 0, number2: 0, }]
+   // question: [{title:0}]
+   // questionChoice: [{choice:''}]
 })
 const db = getFirestore(app);
 
 const account = reactive({
-  name: '',
-  email: '',
-  password: '',
-  uid:'',
-  animalapp_1:0,
-  animalapp_2:0,
+   name: '',
+   email: '',
+   password: '',
+   uid: '',
+   animalapp_1: 0,
+   animalapp_2: 0,
 })
 const auth = getAuth(app)
-const unsub = onAuthStateChanged(auth, async (user)=>{
-  if (user) {
-    account.name='已登入'
-    account.email = user.email?user.email:''
-    account.uid = user.uid?user.uid:''
-    
-    const userDoc = await getDoc(doc(db, "Users", user.uid));
+const unsub = onAuthStateChanged(auth, async (user) => {
+   if (user) {
+      account.name = '已登入'
+      account.email = user.email ? user.email : ''
+      account.uid = user.uid ? user.uid : ''
 
-    if (userDoc.exists()) {
-      account.name = userDoc.data().name? userDoc.data().name:''
-      account.uid = user.uid?user.uid:''
-      account.animalapp_1=userDoc.data().animalapp_1? userDoc.data().animalapp_1:0
-      account.animalapp_2=userDoc.data().animalapp_2? userDoc.data().animalapp_2:0
-    }
-    else{
+      const userDoc = await getDoc(doc(db, "Users", user.uid));
+
+      if (userDoc.exists()) {
+         account.name = userDoc.data().name ? userDoc.data().name : ''
+         account.uid = user.uid ? user.uid : ''
+         account.animalapp_1 = userDoc.data().animalapp_1 ? userDoc.data().animalapp_1 : 0
+         account.animalapp_2 = userDoc.data().animalapp_2 ? userDoc.data().animalapp_2 : 0
+      }
+      else {
+         account.name = '未登入'
+      }
+   }
+   else {
       account.name = '未登入'
-    }
-  }
-  else{
-    account.name='未登入'
-    account.email = ''
-  }
-  return () => {
-    unsub();
-  }}
+      account.email = ''
+   }
+   return () => {
+      unsub();
+   }
+}
 );
 
 </script>
@@ -92,14 +95,37 @@ const unsub = onAuthStateChanged(auth, async (user)=>{
             cover></v-carousel-item>
       </v-carousel>
    </div>
-   <div style="height: 350px;">
-      <p style="color: white; font-weight: bold; font-size: 25px; background-color: #844200; width: 40px; border-radius: 30px; height: 220px; padding-top: 15px;
-         margin: 120px 0px 0px 20px; text-align: center;">
-         知識學習區</p>
-         <div>
-            <h3>動物常識 單元一 答對題數：{{ account.animalapp_1 }}</h3>
-            <h3>動物常識 單元二 答對題數：{{ account.animalapp_2 }}</h3>
+   <div style="height: 350px; display: flex; margin-bottom: 80px;">
+      <div style="margin-top: 100px; margin-left: 20px;">
+         <p style="color: white; font-weight: bold; font-size: 25px; background-color: #844200; width: 40px; border-radius: 30px; height: 220px; padding-top: 15px;
+         margin: 120px 0px px 20px; text-align: center;">
+            知識學習區</p>
+      </div>
+      <div style="font-size: 18px; line-height: 40px; margin: 40px 65px 40px 60px;">
+         <p>【什麼是冷知識呢？】
+            <BookOneVue />
+         </p>
+         <div style="display: flex; justify-content: space-between;">
+            <div></div>
+            <div>
+               <router-link to="/animalapp">
+                  <v-btn>前往答題</v-btn>
+               </router-link>
+            </div>
          </div>
+         <p>【什麼是動物園呢？】
+            <BookTwoVue />
+         </p>
+
+         <div style="display: flex; justify-content: space-between;">
+            <div></div>
+            <div>
+               <router-link to="/animalapp">
+                  <v-btn>前往答題</v-btn>
+               </router-link>
+            </div>
+         </div>
+      </div>
    </div>
    <div style="background-color: #F58D59; padding: 15px 20px 20px 20px;">
       <center>

@@ -98,6 +98,7 @@ async function onClick() {
     });
 
     account.tel = '';
+    alert("刪除成功！")
   } catch (error) {
     console.error("刪除錯誤");
   }
@@ -140,7 +141,7 @@ async function onClick() {
                 <table style="background-color: #FEF1E6; border-radius: 20px;">
                   <thead>
                     <tr>
-                      <th style="width: 120px">冷知識2(一)</th>
+                      <th style="width: 120px">冷知識(一)</th>
                       <th style="width: 150px">動物常識(一)</th>
                     </tr>
                   </thead>
@@ -152,7 +153,7 @@ async function onClick() {
                   </tbody>
                   <thead>
                     <tr>
-                      <th>冷知識2(二)</th>
+                      <th>冷知識(二)</th>
                       <th>動物常識(二)</th>
                     </tr>
                   </thead>
@@ -173,7 +174,7 @@ async function onClick() {
                 <table style="background-color: #FEF1E6; border-radius: 20px;">
                   <thead>
                     <tr>
-                      <th style="width: 120px">冷知識2(一)</th>
+                      <th style="width: 120px">冷知識(一)</th>
                       <th style="width: 150px">動物常識(一)</th>
                     </tr>
                   </thead>
@@ -187,7 +188,7 @@ async function onClick() {
                   </tbody>
                   <thead>
                     <tr>
-                      <th>冷知識2(二)</th>
+                      <th>冷知識(二)</th>
                       <th>動物常識(二)</th>
                     </tr>
                   </thead>
