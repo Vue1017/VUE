@@ -120,7 +120,7 @@ async function checkAnswers() {
     }
     let incorrect = 2 - correctCount;
     await updateDoc(doc(db, "Users", account.uid), {
-      animalapp_2: correct,
+      animalapp_2: correctCount,
       animalapp2_f: incorrect,
       animal2_count: increment(1),
     });
