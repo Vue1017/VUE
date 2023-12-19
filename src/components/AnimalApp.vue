@@ -9,18 +9,18 @@ import { CompilerDeprecationTypes } from '@vue/compiler-core'
 
 
 type state_type = {
-  choice: {title:string, value:number},
+  choice: { title: string, value: number },
   answer: string[],
   answers: string[][],
   message: string[],
-  exams: {title:string, answer:string, answers:string[], choice:string[]}[]
+  exams: { title: string, answer: string, answers: string[], choice: string[] }[]
 }
-const state:state_type = reactive({
+const state: state_type = reactive({
   choice: { title: '單元一', value: 1 },
   answer: [''],
   answers: [],
   message: [''],
-  exams: [{ title: '', answer:'', answers: [''], choice: ['', ''] }]
+  exams: [{ title: '', answer: '', answers: [''], choice: ['', ''] }]
   // questionChoice: [{choice:''}]
 })
 
@@ -28,8 +28,8 @@ const account = reactive({
   name: '',
   email: '',
   password: '',
-  uid:'',
-  answerQA:0,
+  uid: '',
+  answerQA: 0,
 })
 
 const auth = getAuth(app)
@@ -43,30 +43,31 @@ generateQuestions()
 //   },
 // ];
 
-const unsub = onAuthStateChanged(auth, async (user)=>{
+const unsub = onAuthStateChanged(auth, async (user) => {
   if (user) {
-    account.name='已登入'
-    account.email = user.email?user.email:''
-    account.uid = user.uid?user.uid:''
-    
+    account.name = '已登入'
+    account.email = user.email ? user.email : ''
+    account.uid = user.uid ? user.uid : ''
+
     const userDoc = await getDoc(doc(db, "user", user.uid));
 
     if (userDoc.exists()) {
-      account.name = userDoc.data().name? userDoc.data().name:''
-      account.uid = user.uid?user.uid:''
-      account.answerQA = userDoc.data().animal1_count? userDoc.data().animal1_count:''
+      account.name = userDoc.data().name ? userDoc.data().name : ''
+      account.uid = user.uid ? user.uid : ''
+      account.answerQA = userDoc.data().animal1_count ? userDoc.data().animal1_count : ''
     }
-    else{
+    else {
       account.name = '未登入'
     }
   }
-  else{
-    account.name='未登入'
+  else {
+    account.name = '未登入'
     account.email = ''
   }
   return () => {
     unsub();
-  }}
+  }
+}
 );
 
 let units = [
@@ -75,53 +76,54 @@ let units = [
 ]
 
 async function checkAnswers() {
-  let correct=0;
+  let correct = 0;
   if (state.choice.value === 1) {
     state.message = []
     for (let i in state.exams) {
       if (state.answer[i] == state.exams[i].answer) {
         correct++;
-        state.message[i] = '正確'     
+        state.message[i] = '正確'
       } else {
-      state.message[i] = '不正確?'
+        state.message[i] = '不正確?'
       }
     }
-    let incorrect=2-correct;
+    let incorrect = 2 - correct;
     await updateDoc(doc(db, "Users", account.uid), {
-        animalapp_1:correct,
-        animalapp1_f:incorrect,
-        animal1_count:increment(1),
-      });
+      animalapp_1: correct,
+      animalapp1_f: incorrect,
+      animal1_count: increment(1),
+    });
   } else {
-    let correctCount=0;
+    let correctCount = 0;
     state.message = []
     for (let i in state.exams) {
       if (state.exams[i].answers.length === state.answers[i].length) {
         let correct = 0;
-      for (let item of state.exams[i].answers) {
+        for (let item of state.exams[i].answers) {
 
-        if(state.exams[i].answer.includes(item)){
-         correct ++;
+          if (state.exams[i].answer.includes(item)) {
+            correct++;
+          }
+        }
+        if (correct == state.exams[i].answers.length) {
+          state.message[i] = '正確'
+          correctCount++;
+        }
+        else {
+          console.log(correct);
+          state.message[i] = '不正確'
         }
       }
-       if(correct == state.exams[i].answers.length){
-        state.message[i] = '正確'
-        correctCount++;
-       }
-       else {
-        console.log(correct);
-        state.message[i] = '不正確2'
-      }  }
       else {
-        state.message[i] = '不正確1'
-       }
+        state.message[i] = '不正確'
+      }
     }
-    let incorrect = 2-correctCount;
+    let incorrect = 2 - correctCount;
     await updateDoc(doc(db, "Users", account.uid), {
-      animalapp_2:correct,
-      animalapp2_f:incorrect,
-      animal2_count:increment(1),
-      });
+      animalapp_2: correct,
+      animalapp2_f: incorrect,
+      animal2_count: increment(1),
+    });
   }
 }
 
@@ -164,56 +166,40 @@ const showNextButton = ref(true)
 </script>
 
 <template>
-  <div>
-    <v-select label="請選擇" v-model="state.choice.value" :items="units"> </v-select>
-  </div>
-
-  <div v-if="state.choice.value === 1">
-    <BookOne />
-    <v-btn @click="next" v-if="showNextButton">查看問題</v-btn>
-    <div v-for="(exam, index) in state.exams" :key="index">
-      <v-radio-group
-        v-model="state.answer[index]"
-        :label="exam.title"
-        :messages="state.message[index]"
-      >
-        <v-radio
-          v-for="(c, index) in exam.choice"
-          :key="index"
-          v-model="state.answer[index]"
-          :value="c"
-          :label="c"
-        >
-        </v-radio>
-      </v-radio-group>
-    </div>
-  </div>
-
-  <div v-if="state.choice.value === 2">
-    <BookTwo />
-    <v-btn @click="next" v-if="showNextButton">查看問題</v-btn>
-    <div v-for="(exam, index) in state.exams" :key="index">
-
-      <div
-
-        :label="exam.title"
-        :messages="state.message[index]"
-      >
-      {{ exam.title }}
-      {{ state.message[index] }}
-{{ state.answers[index] }}
-
-      <v-checkbox
-          v-for="(c, i) in exam.choice"
-          :key="i"
-          v-model="state.answers[index]"
-          :value="c"
-          :label="c"
-        >
-        </v-checkbox>
+  <center>
+    <div style="width: 50%; margin-top: 50px;">
+      <div>
+        <v-select label="請選擇" v-model="state.choice.value" :items="units"> </v-select>
       </div>
 
+      <div v-if="state.choice.value === 1">
+        <BookOne />
+        <v-btn style="margin: 15px 0px 15px 0px;" @click="next" v-if="showNextButton">查看問題</v-btn>
+        <div v-for="(exam, index) in state.exams" :key="index">
+          <v-radio-group v-model="state.answer[index]" :label="exam.title" :messages="state.message[index]">
+            <v-radio v-for="(c, index) in exam.choice" :key="index" v-model="state.answer[index]" :value="c" :label="c">
+            </v-radio>
+          </v-radio-group>
+        </div>
+      </div>
+
+      <div v-if="state.choice.value === 2">
+        <BookTwo />
+        <v-btn style="margin: 15px 0px 15px 0px" @click="next" v-if="showNextButton">查看問題</v-btn>
+        <div v-for="(exam, index) in state.exams" :key="index">
+          <div :label="exam.title" :messages="state.message[index]">
+            <p style="text-align: left; font-weight: bold">{{ exam.title }}</p>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+              <p>你選擇的答案：{{ state.answers[index] }}</p>
+              <p>答題結果：{{ state.message[index] }}</p>
+            </div>
+            <v-checkbox v-for="(c, i) in exam.choice" :key="i" v-model="state.answers[index]" :value="c" :label="c">
+            </v-checkbox>
+          </div>
+
+        </div>
+      </div>
     </div>
-  </div>
-  <v-btn color="primary" @click="checkAnswers">檢查答案</v-btn>
+    <v-btn style="margin: 20px 0px 70px 0px;" color="primary" @click="checkAnswers">檢查答案</v-btn>
+  </center>
 </template>
