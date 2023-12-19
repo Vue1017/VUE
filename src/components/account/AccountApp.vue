@@ -22,7 +22,7 @@ const auth = getAuth(app)
 const db = getFirestore(app);
 
 watch(login, () => {
-  if (login.email!== ""){
+  if (login.email !== "") {
     account.email = login.email
     account.name = login.name
     state.action = 'signOut'
@@ -37,7 +37,7 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
       const name = account.name;
       const res = await createUserWithEmailAndPassword(auth, account.email, account.password)
       const uid = res.user.uid;
-      
+
       console.log(account.name)
       await setDoc(doc(db, "Users", uid), {
         name: name
@@ -46,6 +46,7 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
         state.status = 'success'
         state.message = '註冊成功'
       }
+      router.push("/")
     }
     else if (status === 'signIn') {
       state.message = '登入中...'
@@ -57,19 +58,19 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
         if (userDoc.exists()) {
           account.name = userDoc.data().name ? userDoc.data().name : ''
 
-        await updateDoc(userRef, {
-          loginCount: increment(1)
-      });
+          await updateDoc(userRef, {
+            loginCount: increment(1)
+          });
         }
         state.action = 'signOut'
         state.status = 'success'
         state.message = login.email + '登入成功'
-        router.push("/index")
       }
+      router.push("/")
     } else {
       state.message = '登出中...'
       await signOut(auth)
-      state.action="signIn"
+      state.action = "signIn"
       state.status = 'success'
       state.message = '登出成功'
     }
@@ -131,7 +132,7 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
         <div v-else>
           {{ account.name }}
         </div>
-        <v-text-field v-if="state.action!=='signOut'" v-model="account.email" label="帳號"></v-text-field>
+        <v-text-field v-if="state.action !== 'signOut'" v-model="account.email" label="帳號"></v-text-field>
         <v-text-field v-model="account.password" label="密碼" type="password"></v-text-field>
         <v-alert :type="state.status" title="訊息" :text="state.message"></v-alert>
       </div>
@@ -150,7 +151,7 @@ async function handleClick(status: 'signIn' | 'signUp' | 'signOut') {
           @click="() => state.action = 'signIn'">我要登入</v-btn>
         <v-btn style="background-color: #f58d59; color: white; font-weight: bold; margin: 5px;"
           @click="handleClick('signUp')">註冊</v-btn>
-        
+
       </div>
       <div v-else>
         <v-btn color="secondary" @click="handleClick('signOut')">登出</v-btn>
